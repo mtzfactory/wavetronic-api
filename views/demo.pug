@@ -1,0 +1,12 @@
+html
+    head
+        //- link(rel="stylesheet", href="")
+        title=title
+    body
+        .container.text-center
+            h1 Demo links
+            ul
+                each anchor in anchors
+                    li
+                        a(href=anchor.link) #{anchor.text}
+        //- script(type="text/javascript" src="")
