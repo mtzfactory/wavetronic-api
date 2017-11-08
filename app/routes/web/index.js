@@ -1,10 +1,21 @@
 const express = require('express')
+const debug = require('debug')('web')
 
-const { JAMENDO_REDIRECT_URI } = require('../../constants')
+const { DEBUG, JAMENDO_REDIRECT_URI } = require('../../constants')
 const { jamendoOauth2, jamendoAuthorizationUri } = require('../../jamendo')
 
 var router = express.Router()
 
+if (DEBUG) {
+    // middleware to use for all requests
+    router.use(function(req, res, next) {
+        // do logging
+        const { method, path, body} = req
+        debug({ method, path, body })
+        //console.log(`${Date.now()} Something is happening with the API.`)
+        next() // make sure we go to the next routes and don't stop here
+    })
+}
 router.get('/', (req, res) => {
     //res.end('<h1>Welcome!</h1><br><p>How is your day?</p>')
     const timestamp = new Date()

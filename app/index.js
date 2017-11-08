@@ -1,16 +1,20 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const moment = require('moment')
+const debug = require('debug')('app')
 
 require('dotenv').config()
-const { PORT, JAMENDO_CLIENT_ID, JAMENDO_CLIENT_SECRET, JAMENDO_REDIRECT_URI } = require('./constants')
+const { DEBUG, PORT, JAMENDO_CLIENT_ID, JAMENDO_CLIENT_SECRET, JAMENDO_REDIRECT_URI } = require('./constants')
 
-console.log('SERVER PORT\t\t', PORT)
-console.log('JAMENDO_CLIENT_ID\t', JAMENDO_CLIENT_ID)
-console.log('JAMENDO_CLIENT_SECRET\t', JAMENDO_CLIENT_SECRET)
-
+if (DEBUG)
+{
+    debug('DEBUG\t\t\t', DEBUG)
+    debug('SERVER PORT\t\t', PORT)
+    debug('JAMENDO_CLIENT_ID\t\t', JAMENDO_CLIENT_ID)
+    debug('JAMENDO_CLIENT_SECRET\t', JAMENDO_CLIENT_SECRET)
+}
 if (!PORT || !JAMENDO_CLIENT_ID || !JAMENDO_CLIENT_SECRET)
-    return console.log('\nSet the environment first.')
+    return debug('Set the environment first.')
 
 const app = express()
 
@@ -40,10 +44,10 @@ app.set('view engine', 'pug')
 app.locals.token = ''
 
 app.listen(PORT, () => {
-    console.log(`Magic happens on port ${PORT}`) // eslint-disable-line
+    debug(`Magic happens on port ${PORT}`) // eslint-disable-line
 })
 
 process.on('SIGINT', function() {
-  console.log('\nBye bye! Have a nice day ;-)')
+  debug('Bye bye! Have a nice day ;-)')
   process.exit()
 })
