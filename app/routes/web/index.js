@@ -11,7 +11,6 @@ if (DEBUG) {
     web.use(function(req, res, next) {
         // do logging
         const { method, path, body} = req
-        console.log(path)
         if (!path.match(/(api)|(auth)|(jamendo)/)) debug({ method, path, body })
         //console.log(`${Date.now()} Something is happening with the API.`)
         next() // make sure we go to the next routes and don't stop here

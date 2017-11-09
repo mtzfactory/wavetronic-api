@@ -49,7 +49,7 @@ auth.post('/login', passport.authenticate('local', { session: false }), (req, re
     })
 })
 
-auth.get('/logout', function(req, res){
+auth.get('/revoke', function(req, res){
     req.logout()
     res.redirect('/')
 })
