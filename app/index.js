@@ -14,26 +14,24 @@ if (DEBUG)
     debug('JAMENDO_CLIENT_SECRET\t', JAMENDO_CLIENT_SECRET)
 }
 if (!PORT || !JAMENDO_CLIENT_ID || !JAMENDO_CLIENT_SECRET)
-    return debug('Set the environment first.')
+    return debug('> Set the environment variables first.')
 
+// SERVER
 const app = express()
-
-// CORS
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*")
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-    
-    next()
-})
 
 // configure app to use bodyParser() middleware
 // this will let us get the data from a POST
 //app.use(bodyParser.urlencoded({ extended: true }))  // para parsear formularios x-www-form-urlencoded
 app.use(bodyParser.json())                          // para parsear formularios en formato raw/json
 
+// CORS
+app.use(require('./cors'))
+
 // REGISTER OUR ROUTES -------------------------------
 // all of our API routes will be prefixed with /api/v1
 app.use('/api/v1', require('./routes/api'))
+// jamendo auth
+app.use('/jamendo', require('./routes/jamendo'))
 // rest of the web
 app.use('/', require('./routes/web'))
 
@@ -48,6 +46,6 @@ app.listen(PORT, () => {
 })
 
 process.on('SIGINT', function() {
-  debug('Bye bye! Have a nice day ;-)')
+  debug('> Bye bye! Have a nice day ;-)')
   process.exit()
 })

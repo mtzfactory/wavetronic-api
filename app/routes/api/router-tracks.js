@@ -2,7 +2,7 @@ const express = require('express')
 const jsonTransform = require('express-json-transform')
 const musicService = require('../../services/MusicService')
 
-const router = express.Router()
+const tracks = express.Router()
 
 const removeThisProperties = [ 'license_ccurl', 'audiodownload', 'position', 'prourl', 'shorturl', 'shareurl' ]
 
@@ -16,7 +16,7 @@ const cleanJson = jsonTransform(function(json) {
     return json
 })
 
-router.route('/')
+tracks.route('/')
     .get(cleanJson, function(req, res) {
         const reqStart = new Date().getTime()
 
@@ -35,7 +35,7 @@ router.route('/')
             .catch( error => res.status(404).json(error.message) )
     })
 
-router.route('/tags/:fuzzytags')
+tracks.route('/tags/:fuzzytags')
     .get(cleanJson, function(req, res) {
         const reqStart = new Date().getTime()
 
@@ -55,4 +55,4 @@ router.route('/tags/:fuzzytags')
             .catch( error => res.status(404).json(error.message) )
     })
 
-module.exports = router
+module.exports = tracks

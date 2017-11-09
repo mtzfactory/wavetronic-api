@@ -2,7 +2,7 @@ const { DEBUG } = process.env
 const { PORT } = process.env
 const { JAMENDO_CLIENT_ID } = process.env
 const { JAMENDO_CLIENT_SECRET } = process.env
-const JAMENDO_REDIRECT_URI = `http://localhost:${PORT}/oauth2/callback`
+const JAMENDO_REDIRECT_URI = `http://localhost:${PORT}/jamendo/oauth2/callback`
 
 module.exports = {
     DEBUG,

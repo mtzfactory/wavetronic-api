@@ -2,7 +2,7 @@ const express = require('express')
 const jsonTransform = require('express-json-transform')
 const musicService = require('../../services/MusicService')
 
-const router = express.Router()
+const albums = express.Router()
 
 const removeThisProperties = [ 'zip', 'shorturl', 'shareurl' ]
 
@@ -16,7 +16,7 @@ const cleanJson = jsonTransform(function(json) {
     return json
 })
 
-router.route('/')
+albums.route('/')
     .get(cleanJson, function(req, res) {
         const reqStart = new Date().getTime()
         
@@ -34,7 +34,7 @@ router.route('/')
             .catch( error => res.status(404).json(error.message) )
     })
 
-router.route('/id/:album_id')
+albums.route('/id/:album_id')
     .get(cleanJson, function(req, res) {
         const reqStart = new Date().getTime()
 
@@ -51,4 +51,4 @@ router.route('/id/:album_id')
             .catch( error => res.status(404).json(error.message) )
     })
 
-module.exports = router
+module.exports = albums

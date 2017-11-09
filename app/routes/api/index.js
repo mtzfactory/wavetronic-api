@@ -3,7 +3,7 @@ const debug = require('debug')('api')
 
 const { DEBUG } = require('../../constants')
 
-const router = express.Router()
+const api = express.Router()
 
 if (DEBUG) {
     // middleware to use for all requests
@@ -16,8 +16,8 @@ if (DEBUG) {
     })
 }
 
-router.use('/albums', require('./router-albums'))
-router.use('/tracks', require('./router-tracks'))
-router.use('/playlists', require('./router-playlists'))
+api.use('/albums', require('./router-albums'))
+api.use('/tracks', require('./router-tracks'))
+api.use('/playlists', require('./router-playlists'))
 
-module.exports = router
+module.exports = api

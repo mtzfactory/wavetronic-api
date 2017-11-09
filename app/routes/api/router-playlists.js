@@ -2,7 +2,7 @@ const express = require('express')
 const jsonTransform = require('express-json-transform')
 const musicService = require('../../services/MusicService')
 
-const router = express.Router()
+const playlists = express.Router()
 
 const removeThisProperties = [ 'zip', 'shorturl', 'shareurl' ]
 
@@ -16,7 +16,7 @@ const cleanJson = jsonTransform(function(json) {
     return json
 })
 
-router.route('/')
+playlists.route('/')
     .get(cleanJson, function(req, res) {
         const reqStart = new Date().getTime()
 
@@ -37,7 +37,7 @@ router.route('/')
             .catch( error => res.status(404).json(error.message) )
     })
 
-router.route('/search/:namesearch')
+playlists.route('/search/:namesearch')
     .get(cleanJson, function(req, res) {
         const reqStart = new Date().getTime()
 
@@ -58,7 +58,7 @@ router.route('/search/:namesearch')
             .catch( error => res.status(404).json(error.message) )
     })
 
-router.route('/tracks/:playlist_id')
+playlists.route('/tracks/:playlist_id')
     .get(cleanJson, function(req, res) {
         const reqStart = new Date().getTime()
         
@@ -77,4 +77,4 @@ router.route('/tracks/:playlist_id')
             .catch( error => res.status(404).json(error.message) )
     })
 
-module.exports = router
+module.exports = playlists
