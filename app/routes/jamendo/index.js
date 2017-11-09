@@ -8,7 +8,7 @@ var jamendo = express.Router()
 
 if (DEBUG) {
     // middleware to use for all requests
-    router.use(function(req, res, next) {
+    jamendo.use(function(req, res, next) {
         // do logging
         const { method, path, body} = req
         debug({ method, path, body })

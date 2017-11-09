@@ -18,17 +18,20 @@ const cleanJson = jsonTransform(function(json) {
 
 albums.route('/')
     .get(cleanJson, function(req, res) {
+        const { offset, limit } = req
         const reqStart = new Date().getTime()
         
         const options = {
-            offset: req.query.offset || 0,
-            limit: req.query.limit || 15,
+            offset,
+            limit,
             order: 'popularity_month',
         }
 
         musicService.getAlbums(options)
             .then( data => {
                 data.headers.response_time = new Date().getTime() - reqStart
+                data.headers.offset = offset
+                data.headers.limit = limit
                 res.status(200).json(data) 
             })
             .catch( error => res.status(404).json(error.message) )
