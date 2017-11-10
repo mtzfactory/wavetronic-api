@@ -20,11 +20,15 @@ const {
 
 if (DEBUG)
 {
-    debug('DEBUG\t\t\t\t', DEBUG)
-    debug('API_PORT\t\t\t\t', API_PORT)
-    debug('JAMENDO_CLIENT_ID\t\t\t', JAMENDO_CLIENT_ID)
-    debug('JAMENDO_CLIENT_SECRET\t\t', JAMENDO_CLIENT_SECRET)
-    debug('MONGO_USER:MONGO_PASS@MONGO_HOST:MONGO_PORT/MONGO_DB\t', `${MONGO_USER}:${MONGO_PASS}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}`)
+    debug('DEBUG\t\t\t', DEBUG)
+    debug('API_PORT\t\t\t', API_PORT)
+    debug('JAMENDO_CLIENT_ID\t\t', JAMENDO_CLIENT_ID)
+    debug('JAMENDO_CLIENT_SECRET\t', JAMENDO_CLIENT_SECRET)
+    debug('MONGO_USER\t\t', MONGO_USER)
+    debug('MONGO_PASS\t\t', MONGO_PASS)
+    debug('MONGO_HOST\t\t', MONGO_HOST)
+    debug('MONGO_PORT\t\t', MONGO_PORT)
+    debug('MONGO_DB\t\t\t', MONGO_DB)
 }
 
 if (!API_PORT || !API_SECRET)
