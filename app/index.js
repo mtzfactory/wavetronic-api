@@ -7,10 +7,12 @@ require('dotenv').config()
 const { 
     DEBUG,
     API_PORT,
-    MONGO_URL,
+    API_SECRET,
+    MONGO_HOST,
     MONGO_DB,
     MONGO_PORT,
-    PASSPORT_SECRET,
+    MONGO_USER,
+    MONGO_PASS,
     JAMENDO_CLIENT_ID,
     JAMENDO_CLIENT_SECRET,
     JAMENDO_REDIRECT_URI
@@ -22,14 +24,20 @@ if (DEBUG)
     debug('API_PORT\t\t\t\t', API_PORT)
     debug('JAMENDO_CLIENT_ID\t\t\t', JAMENDO_CLIENT_ID)
     debug('JAMENDO_CLIENT_SECRET\t\t', JAMENDO_CLIENT_SECRET)
-    debug('MONGO_URL:MONGO_PORT/MONGO_DB\t', `${MONGO_URL}:${MONGO_PORT}/${MONGO_DB}`)
+    debug('MONGO_USER:MONGO_PASS@MONGO_HOST:MONGO_PORT/MONGO_DB\t', `${MONGO_USER}:${MONGO_PASS}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}`)
 }
 
-if (!API_PORT || !MONGO_URL || !MONGO_PORT || !MONGO_DB || !PASSPORT_SECRET || !JAMENDO_CLIENT_ID || !JAMENDO_CLIENT_SECRET)
-    return debug('> Set the environment variables first.')
+if (!API_PORT || !API_SECRET)
+    return debug('> Set the API environment variables first.')
 
+if (!MONGO_HOST || !MONGO_PORT || !MONGO_DB || !MONGO_USER || ! MONGO_PASS)
+    return debug('> Set the MONGO environment variables first.')
+
+if (!JAMENDO_CLIENT_ID || !JAMENDO_CLIENT_SECRET)
+    return debug('> Set the JAMENDO environment variables first.')
+    
 // MONGO ---------------------------------------------
-require('./mongoose')(`${MONGO_URL}:${MONGO_PORT}/${MONGO_DB}`)
+require('./mongoose')(`mongodb://${MONGO_USER}:${MONGO_PASS}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}`)
 
 // WEB & API SERVER ----------------------------------
 const app = express()
@@ -43,7 +51,7 @@ app.use(bodyParser.json())                          // para parsear formularios 
 app.use(require('./cors'))
 
 // PASSPORT ------------------------------------------
-app.use(require('./passport')(PASSPORT_SECRET))
+app.use(require('./passport')(API_SECRET))
 
 // PUG -----------------------------------------------
 app.set('view engine', 'pug')

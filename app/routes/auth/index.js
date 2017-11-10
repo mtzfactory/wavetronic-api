@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 const debug = require('debug')('auth')
 const User = require('../../users/UserModel')
 
-const { DEBUG, PASSPORT_SECRET } = require('../../constants')
+const { DEBUG, API_SECRET } = require('../../constants')
 
 const auth = express.Router()
 
@@ -40,7 +40,7 @@ auth.post('/register', (req, res) => {
 auth.post('/login', passport.authenticate('local', { session: false }), (req, res) => {
     const { _id: id, username } = req.user
 
-    const token = jwt.sign({ id, username }, PASSPORT_SECRET)
+    const token = jwt.sign({ id, username }, API_SECRET)
 
     res.json({
         status: 'OK',
