@@ -32,21 +32,21 @@ class UserService {
 
     _query(validate, conditions, options, single) {
         return Promise.resolve()
-        .then(() => {
-            if (validate) validate()
+            .then(() => {
+                if (validate) validate()
 
-            if (!single) validateOptions(options)
+                if (!single) validateOptions(options)
 
-            options.select = ''
-            if (options.hide) // el orden es importante, hide primero...
-                options.select += options.hide.split(',').map(field => `-${field}`).join(' ')
-            if (options.show)
-                options.select += ' ' + options.show.split(',').join(' ')
+                options.select = ''
+                if (options.hide) // el orden es importante, hide primero...
+                    options.select += options.hide.split(',').map(field => `-${field}`).join(' ')
+                if (options.show)
+                    options.select += ' ' + options.show.split(',').join(' ')
 
-            return single
-                ? User.findOne(conditions, options.select) 
-                : User.paginate(conditions, options)
-        })
+                return single
+                    ? User.findOne(conditions, options.select) 
+                    : User.paginate(conditions, options)
+            })
     }
 
     updateLastLogin(userId) {
@@ -59,7 +59,7 @@ class UserService {
     }
 
     getUserProfile(userId) {
-        debug('UserService', 'getUserProfile', userId)
+        debug('getUserProfile', userId)
         return this._query(() => {
             if (!userId) throw new Error(`userId cannot be ${user}`)
         }, { _id: userId }, { hide: '_id' }, true)
@@ -75,7 +75,7 @@ class UserService {
     }
 
     addFriend(userId, friend) {
-        debug('UserService', 'addFriend', userId, friend)
+        debug('addFriend', userId, friend)
         return this._getIdByUsername(friend)
             .then( friendId => {
                 return this._isInTheList(userId, 'friends', { $elemMatch: { username: friend } })
@@ -93,7 +93,7 @@ class UserService {
     }
 
     updateFriendship(userId, friend) {
-        debug('UserService', 'updateFriendship', userId, friend)
+        debug('updateFriendship', userId, friend)
         return false
     }
 
@@ -103,7 +103,7 @@ class UserService {
     }
 
     addPlaylist(userId, playlist) {
-        debug('UserService', 'addPlaylist', userId, playlist)
+        debug('addPlaylist', userId, playlist)
         return this._isInTheList(userId, 'playlists', { $elemMatch: { name: playlist } })
             .then( playlists => {
                 if (playlists.length === 0) {
@@ -118,15 +118,16 @@ class UserService {
     }
 
     removePlaylist(userId, playlistId) {
-        debug('UserService', 'removePlaylist', userId, playlistId)
+        debug('removePlaylist', userId, playlistId)
         return User.findOneAndUpdate(
             userId,
             { $pull: { playlists: { _id: playlistId } } },
-            { new: true, fields: { _id: 0, playlists: 1 } }).exec()
+            { new: true, fields: { _id: 0, playlists: 1 } })
+            .exec() // Para que devuelva un Promise.
     }
 
     addTrackToPlaylist(userId, playlistId, track) {
-        debug('UserService', 'addTrackToPlaylist', userId, playlistId, track)
+        debug('addTrackToPlaylist', userId, playlistId, track)
         return User.find({ _id: userId, 'playlists._id': playlistId, 'playlists.tracks': {$in: [track] } })
             .exec()
             .then( playlists => {
