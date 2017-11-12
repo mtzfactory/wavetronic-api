@@ -2,7 +2,7 @@ const express = require('express')
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
 const debug = require('debug')('auth')
-const User = require('../../users/UserModel')
+const User = require('../../models/UserModel')
 
 const { DEBUG, API_SECRET } = require('../../constants')
 
@@ -20,15 +20,24 @@ if (DEBUG) {
 }
 
 auth.post('/register', (req, res) => {
-    const { username, password } = req.body
+    const { username, password, email } = req.body
 
-    const user = new User({ username })
+    if (!email) {
+        return res.status(400).json({
+            status: 'KO',
+            message: 'Email not informed'
+        })
+    }
+
+    const user = new User({ username, email })
 
     User.register(user, password, err => {
-        if (err) return res.json({
-            status: 'KO',
-            message: err.message
-        })
+        if (err) {
+            return res.json({
+                status: 'KO',
+                message: err.message
+            })
+        }
 
         res.json({
             status: 'OK',
@@ -41,6 +50,9 @@ auth.post('/login', passport.authenticate('local', { session: false }), (req, re
     const { _id: id, username } = req.user
 
     const token = jwt.sign({ id, username }, API_SECRET)
+
+    const userService = require('../../services/UserService')
+    userService.updateLastLogin(id)
 
     res.json({
         status: 'OK',

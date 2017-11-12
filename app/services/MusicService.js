@@ -10,17 +10,6 @@ class MusicService {
         }
     }
 
-    // getTracks (options, cb) {
-    //     if (options) Object.assign(options, this.parameters)
-    
-    //     jamendo.tracks(options, function(error, body) {
-    //         if (error)
-    //             return cb(null, error)
-            
-    //         cb(body, null)
-    //     })
-    // }
-
     getTracks(options) {
         return new Promise((resolve, reject) => {
             if (options) Object.assign(options, this.parameters)
@@ -34,17 +23,6 @@ class MusicService {
         })
     }
 
-    // getAlbums (options, cb) {
-    //     if (options) Object.assign(options, this.parameters)
-    
-    //     jamendo.albums(options, function(error, body) {
-    //         if (error)
-    //             return cb(null, error)
-            
-    //         cb(body, null)
-    //     })
-    // }
-
     getAlbums (options) {
         return new Promise((resolve, reject) => {
             if (options) Object.assign(options, this.parameters)
@@ -57,17 +35,6 @@ class MusicService {
             })
         })
     }
-    
-    // getPlaylists (options, cb) {
-    //     if (options) Object.assign(options, this.parameters)
-    
-    //     jamendo.playlists(options, function(error, body) {
-    //         if (error)
-    //             return cb(null, error)
-        
-    //         cb(body, null)
-    //     })
-    // }
 
     getPlaylists (options) {
         return new Promise((resolve, reject) => {
@@ -81,17 +48,6 @@ class MusicService {
             })
         })
     }
-    
-    // getPlaylistTracks (options, cb) {
-    //     if (options) Object.assign(options, this.parameters)
-        
-    //     jamendo.playlists_tracks(options, function(error, body) {
-    //         if (error)
-    //             return cb(null, error)
-        
-    //         cb(body, null)
-    //     })
-    // }
 
     getPlaylistTracks (options) {
         return new Promise((resolve, reject) => {
@@ -107,4 +63,5 @@ class MusicService {
     }
 }
 
+// exportamos uns singleton...
 module.exports = new MusicService()

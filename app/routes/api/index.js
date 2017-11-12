@@ -14,30 +14,23 @@ if (DEBUG) {
         // do logging
         const { method, path, body} = req
         debug({ method, path, body })
-        //console.log(`${Date.now()} Something is happening with the API.`)
         next() // make sure we go to the next routes and don't stop here
     })
 }
 
-api.use((req, res, proceed) => {
-    const { offset, limit } = req.query
-
-    req.offset = offset ? parseInt(offset) : 1
-    req.limit = limit ? parseInt(limit) : 15
-
-    proceed()
-})
-
 api.get('/', (req, res) => {
+    const { id: userId, username } = req.user // Passport
+
     res.status(200)
         .json({
             'status': 'success',
-            'message': 'Welcome to Music Share API !'
+            'message': `${username}, welcome to Music Share API !`
         })
 })
 
-api.use('/albums', require('./router-albums'))
-api.use('/tracks', require('./router-tracks'))
-api.use('/playlists', require('./router-playlists'))
+api.use('/album', require('./router-album'))
+api.use('/track', require('./router-track'))
+api.use('/playlist', require('./router-playlist'))
+api.use('/user', require('./router-user'))
 
 module.exports = api

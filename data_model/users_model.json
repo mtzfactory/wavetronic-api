@@ -1,0 +1,107 @@
+[
+    {
+        "id": "5a057ab3ea75a507136005b8",
+        "email": "ricardo.martinezl.monje@gmail.com",
+        "picture": null,
+        "verified": false,
+        "last_login": "1510414427150",
+        "friends": [
+          "5a07175aff476d269fb5e91a",
+          "5a071766ff476d269fb5e91b",
+          "5a07178aff476d269fb5e91c"
+        ],
+        "last_coordinates": [41.398400, 2.174100],
+        "playlists": [
+          {
+            "id": 1,
+            "name": "topSUPERtop",
+            "tracks": [
+              1428765, 1157362, 1174110, 1093795, 287503
+            ]
+          },
+          {
+            "id": 2,
+            "name": "para dormir",
+            "tracks": [
+              887203, 891663, 1017514, 1125749
+            ]
+          }
+        ]
+    },
+    {
+      "id": "5a07175aff476d269fb5e91a",
+      "email": "julie@example.com",
+      "picture": null,
+      "verified": false,
+      "last_login": "1510414422150",
+      "friends": [
+        "5a057ab3ea75a507136005b8",
+        "5a071766ff476d269fb5e91b"
+      ],
+      "last_coordinates": [41.398400, 2.174100],
+      "playlists": []
+    },
+    {
+      "id": "5a071766ff476d269fb5e91b",
+      "email": "eric@example.com",
+      "picture": null,
+      "verified": false,
+      "last_login": "1510411422150",
+      "friends": [],
+      "last_coordinates": [41.398400, 2.174100],
+      "playlists": []
+    },
+    {
+      "id": "5a07178aff476d269fb5e91c",
+      "email": "javi@example.com",
+      "picture": null,
+      "verified": false,
+      "last_login": "1510414412150",
+      "friends": [
+        "5a057ab3ea75a507136005b8",
+        "5a071766ff476d269fb5e91b"
+      ],
+      "last_coordinates": [41.398400, 2.174100],
+      "playlists": []
+    },
+    {
+      "id": "5a071791ff476d269fb5e91d",
+      "email": "pepe@example.com",
+      "picture": null,
+      "verified": false,
+      "last_login": "1510414122150",
+      "friends": [],
+      "last_coordinates": [41.398400, 2.174100],
+      "playlists": []
+    },
+    {
+      "id": "5a071796ff476d269fb5e91e",
+      "email": "juan@example.com",
+      "picture": null,
+      "verified": false,
+      "last_login": "1510411422150",
+      "friends": [],
+      "last_coordinates": [41.398400, 2.174100],
+      "playlists": []
+    },
+    {
+      "id": "5a07179aff476d269fb5e91f",
+      "email": "pedro@example.com",
+      "picture": null,
+      "verified": false,
+      "last_login": "1510412422150",
+      "friends": [],
+      "last_coordinates": [41.398400, 2.174100],
+      "playlists": []
+    },
+    {
+      "id": "5a07179eff476d269fb5e920",
+      "email": "oriol@example.com",
+      "picture": null,
+      "verified": false,
+      "last_login": "1510413422650",
+      "friends": [],
+      "last_coordinates": [41.398400, 2.174100],
+      "playlists": []
+    }
+]

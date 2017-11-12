@@ -2,9 +2,9 @@ const express = require('express')
 const jsonTransform = require('express-json-transform')
 const musicService = require('../../services/MusicService')
 
-const tracks = express.Router()
+const playlist = express.Router()
 
-const removeThisProperties = [ 'license_ccurl', 'audiodownload', 'position', 'prourl', 'shorturl', 'shareurl' ]
+const removeThisProperties = [ 'zip', 'shorturl', 'shareurl' ]
 
 const cleanJson = jsonTransform(function(json) {
     json.results.forEach(function(child) {
@@ -16,7 +16,17 @@ const cleanJson = jsonTransform(function(json) {
     return json
 })
 
-tracks.route('/')
+playlist.use((req, res, proceed) => {
+    const { offset, limit, show } = req.query
+
+    req.offset = offset ? parseInt(offset) : 1
+    req.limit = limit ? parseInt(limit) : 15
+    req.show = show
+
+    proceed()
+})
+
+playlist.route('/')
     .get(cleanJson, function(req, res) {
         const { offset, limit } = req
         const reqStart = new Date().getTime()
@@ -24,11 +34,10 @@ tracks.route('/')
         const options = {
             offset,
             limit,
-            order: 'popularity_month',
-            featured: true
+            order: 'creationdate_desc'
         }
 
-        musicService.getTracks(options)
+        musicService.getPlaylists(options)
             .then( data => {
                 data.headers.response_time = new Date().getTime() - reqStart
                 data.headers.offset = offset
@@ -38,7 +47,7 @@ tracks.route('/')
             .catch( error => res.status(404).json(error.message) )
     })
 
-tracks.route('/tags/:fuzzytags')
+playlist.route('/search/:namesearch')
     .get(cleanJson, function(req, res) {
         const { offset, limit } = req
         const reqStart = new Date().getTime()
@@ -46,12 +55,11 @@ tracks.route('/tags/:fuzzytags')
         const options = {
             offset,
             limit,
-            order: 'popularity_month',
-            featured: true,
-            fuzzytags: req.params.fuzzytags
+            namesearch: req.params.namesearch,
+            order: 'creationdate_desc'
         }
 
-        musicService.getTracks(options)
+        musicService.getPlaylists(options)
             .then( data => {
                 data.headers.response_time = new Date().getTime() - reqStart
                 data.headers.offset = offset
@@ -61,4 +69,20 @@ tracks.route('/tags/:fuzzytags')
             .catch( error => res.status(404).json(error.message) )
     })
 
-module.exports = tracks
+playlist.route('/id/:playlist_id')
+    .get(cleanJson, function(req, res) {
+        const reqStart = new Date().getTime()
+        
+        const options = {
+            id: req.params.playlist_id,
+        }
+
+        musicService.getPlaylistTracks(options)
+            .then( data => {
+                data.headers.response_time = new Date().getTime() - reqStart
+                res.status(200).json(data) 
+            })
+            .catch( error => res.status(404).json(error.message) )
+    })
+
+module.exports = playlist

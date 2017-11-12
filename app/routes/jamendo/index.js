@@ -1,5 +1,5 @@
 const express = require('express')
-const debug = require('debug')('jamendo')
+const debug = require('debug')('jmo')
 
 const { DEBUG, JAMENDO_REDIRECT_URI } = require('../../constants')
 const { jamendoOauth2, jamendoAuthorizationUri } = require('../../jamendo')

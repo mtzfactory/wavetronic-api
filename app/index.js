@@ -20,6 +20,7 @@ const {
 
 if (DEBUG)
 {
+    debug('> Started:\t\t', new Date().toLocaleString())
     debug('DEBUG\t\t\t', DEBUG)
     debug('API_PORT\t\t\t', API_PORT)
     debug('JAMENDO_CLIENT_ID\t\t', JAMENDO_CLIENT_ID)
@@ -80,5 +81,6 @@ app.listen(API_PORT, () => {
 
 process.on('SIGINT', function() {
   debug('> Bye bye! Have a nice day ;-)')
+  debug('> Closed:\t\t', new Date().toLocaleString())
   process.exit()
 })
