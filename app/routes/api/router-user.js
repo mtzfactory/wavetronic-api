@@ -40,7 +40,7 @@ user.route('/friends')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const options = { page, limit, show, hide }
         
-        userService.listAllMy('friends', userId, options)
+        userService.getFriends(userId, options)
             .then( data => {
                 res.status(200).json({
                     status: 'success',
@@ -54,9 +54,43 @@ user.route('/friends')
         const reqStart = new Date().getTime()
         const { id: userId, username } = req.user // Passport
         const { page, limit, show, hide } = req // middleware del router api (index.js)
-        const { friend } = req.body
+        const { name } = req.body
 
-        userService.addFriend(userId, friend)
+        userService.addFriend(userId, name)
+            .then( data => {
+                res.status(200).json({
+                    status: 'success',
+                    headers: { response_time: new Date().getTime() - reqStart },
+                    data
+                }) 
+            })
+            .catch( error => res.status(404).json(error.message) )
+    })
+
+user.route('/friends/:friendId')
+    .put(function(req, res) {
+        const reqStart = new Date().getTime()
+        const { id: userId, username } = req.user // Passport
+        const { page, limit, show, hide } = req // middleware del router api (index.js)
+        const { friendId } = req.params
+        
+        userService.updateFriendship(userId, friendId)
+            .then( data => {
+                res.status(200).json({
+                    status: 'success',
+                    headers: { response_time: new Date().getTime() - reqStart },
+                    data
+                }) 
+            })
+            .catch( error => res.status(404).json(error.message) )
+    })
+    .delete(function(req, res) {
+        const reqStart = new Date().getTime()
+        const { id: userId, username } = req.user // Passport
+        const { page, limit, show, hide } = req // middleware del router api (index.js)
+        const { friendId } = req.params
+
+        userService.removeFriend(userId, friendId)
             .then( data => {
                 res.status(200).json({
                     status: 'success',
@@ -74,7 +108,7 @@ user.route('/playlists')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const options = { page, limit, show, hide }
         
-        userService.listAllMy('playlists', userId, options)
+        userService.getPlaylists(userId, options)
             .then( data => {
                 res.status(200).json({
                     status: 'success',
@@ -88,9 +122,9 @@ user.route('/playlists')
         const reqStart = new Date().getTime()
         const { id: userId, username } = req.user // Passport
         const { page, limit, show, hide } = req // middleware del router api (index.js)
-        const { playlist } = req.body
+        const { name } = req.body
 
-        userService.addPlaylist(userId, playlist)
+        userService.addPlaylist(userId, name)
             .then( data => {
                 res.status(200).json({
                     status: 'success',
@@ -101,18 +135,15 @@ user.route('/playlists')
             .catch( error => res.status(404).json(error.message) )
     })
 
-user.route('/playlists/:playlistId')
-    // .get(function(req, res) {
 
-    // })
-    .put(function(req, res) {
+user.route('/playlists/:playlistId')
+    .get(function(req, res) {
         const reqStart = new Date().getTime()
         const { id: userId, username } = req.user // Passport
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const { playlistId } = req.params
-        const { track } = req.body
 
-        userService.addTrackToPlaylist(userId, playlistId, track)
+        userService.getTracksFromPlaylist(userId, playlistId)
             .then( data => {
                 res.status(200).json({
                     status: 'success',
@@ -129,6 +160,40 @@ user.route('/playlists/:playlistId')
         const { playlistId } = req.params
 
         userService.removePlaylist(userId, playlistId)
+            .then( data => {
+                res.status(200).json({
+                    status: 'success',
+                    headers: { response_time: new Date().getTime() - reqStart },
+                    data
+                }) 
+            })
+            .catch( error => res.status(404).json(error.message) )
+    })
+
+user.route('/playlists/:playlistId/track/:trackId')
+    .put(function(req, res) {
+        const reqStart = new Date().getTime()
+        const { id: userId, username } = req.user // Passport
+        const { page, limit, show, hide } = req // middleware del router api (index.js)
+        const { playlistId, trackId } = req.params
+
+        userService.addTrackToPlaylist(userId, playlistId, trackId)
+            .then( data => {
+                res.status(200).json({
+                    status: 'success',
+                    headers: { response_time: new Date().getTime() - reqStart },
+                    data
+                }) 
+            })
+            .catch( error => res.status(404).json(error.message) )
+    })
+    .delete(function(req, res) {
+        const reqStart = new Date().getTime()
+        const { id: userId, username } = req.user // Passport
+        const { page, limit, show, hide } = req // middleware del router api (index.js)
+        const { playlistId, trackId } = req.params
+
+        userService.removeTrackFromPlaylist(userId, playlistId, trackId)
             .then( data => {
                 res.status(200).json({
                     status: 'success',

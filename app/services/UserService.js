@@ -30,6 +30,15 @@ class UserService {
         return User.find(filter, projection).exec() // Para que devuelva un Promise.
     }
 
+    // _listAllMy(list, userId, options) {
+    //     const showOnlyFriends = Object.assign({}, options)
+    //     showOnlyFriends.show = list
+
+    //     return this._query(() => {
+    //             if (!userId) throw new Error(`userId cannot be ${user}`)
+    //         }, { _id: userId }, showOnlyFriends, true)
+    // }
+
     _query(validate, conditions, options, single) {
         return Promise.resolve()
             .then(() => {
@@ -58,20 +67,22 @@ class UserService {
         return false
     }
 
+// api/v1/user
     getUserProfile(userId) {
         debug('getUserProfile', userId)
         return this._query(() => {
-            if (!userId) throw new Error(`userId cannot be ${user}`)
-        }, { _id: userId }, { hide: '_id' }, true)
+                if (!userId) throw new Error(`userId cannot be ${user}`)
+            }, { _id: userId }, { hide: '_id,playlists._id,friends._id' }, true)
     }
 
-    listAllMy(list, userId, options) {
-        const showOnlyFriends = Object.assign({}, options)
-        showOnlyFriends.show = list
-
+// apiv/v1/user/friends
+    getFriends(userId, options) {
+        debug('getFriends', userId)
+        //return this._listAllMy('friends', userId, options)
+        options.show = 'friends.username,friends.confirmed'
         return this._query(() => {
-            if (!userId) throw new Error(`userId cannot be ${user}`)
-        }, { _id: userId }, showOnlyFriends, true)
+                if (!userId) throw new Error(`userId cannot be ${user}`)
+            }, { _id: userId }, options, true)
     }
 
     addFriend(userId, friend) {
@@ -84,7 +95,7 @@ class UserService {
                             return  User.findOneAndUpdate(
                                 userId,
                                 { $push: { friends: { _id: friendId, username: friend } } },
-                                { safe: true, upsert: true, new: true, fields: { _id: 0, friends: 1 } })
+                                { safe: true, upsert: true, new: true, fields: { _id: 0, 'friends.username': 1 } })
                                 .exec() // Para que devuelva un Promise.
                         }
                         return null
@@ -92,14 +103,33 @@ class UserService {
             })
     }
 
+// apiv/v1/user/friends/:friendId
     updateFriendship(userId, friend) {
         debug('updateFriendship', userId, friend)
-        return false
+        return User.findOneAndUpdate(
+            { _id: userId, 'friends.username': friend },
+            { 'friends.$.confirmed': true },
+            { new: true, fields: { _id: 0, 'friends.username': 1, 'friends.confirmed': 1 } })
+            .exec() // Para que devuelva un Promise.
     }
 
     removeFriend(userId, friend) {
-        debug('UserService', 'removeFriend', userId, friend)
-        return false
+        debug('removeFriend', userId, friend)
+        return User.findOneAndUpdate(
+            userId,
+            { $pull: { friends: { username: friend } } },
+            { new: true, fields: { _id: 0, 'friends.username': 1 } })
+            .exec() // Para que devuelva un Promise.
+    }
+
+// api/v1/user/playlists
+    getPlaylists(userId, options) {
+        debug('getPlaylists', userId)
+        //return this._listAllMy('playlists', userId, options)
+        options.show = 'playlists.name,playlists._id'
+        return this._query(() => {
+                if (!userId) throw new Error(`userId cannot be ${user}`)
+            }, { _id: userId }, options, true)
     }
 
     addPlaylist(userId, playlist) {
@@ -110,11 +140,18 @@ class UserService {
                     return  User.findOneAndUpdate(
                         userId,
                         { $push: { playlists: { name: playlist } } },
-                        { safe: true, upsert: true, new: true, fields: { _id: 0, playlists: 1 } })
+                        { safe: true, upsert: true, new: true, fields: { _id: 0, 'playlists._id': 1, 'playlists.name': 1 } })
                         .exec() // Para que devuelva un Promise.
                 }
                 return null
             })
+    }
+
+// api/v1//playlists/:playlistId
+    getTracksFromPlaylist(userId, playlistId) {
+        debug('getTracksFromPlaylist', userId, playlistId)
+        return User.findOne({ _id: userId, 'playlists._id': playlistId }, { _id: 0, 'playlists.$.tracks': 1 })
+            .exec()
     }
 
     removePlaylist(userId, playlistId) {
@@ -122,10 +159,11 @@ class UserService {
         return User.findOneAndUpdate(
             userId,
             { $pull: { playlists: { _id: playlistId } } },
-            { new: true, fields: { _id: 0, playlists: 1 } })
+            { new: true, fields: { _id: 0, 'playlists._id': 1, 'playlists.name': 1 } })
             .exec() // Para que devuelva un Promise.
     }
 
+// api/v1//playlists/:playlistId/track/:trackId
     addTrackToPlaylist(userId, playlistId, track) {
         debug('addTrackToPlaylist', userId, playlistId, track)
         return User.find({ _id: userId, 'playlists._id': playlistId, 'playlists.tracks': {$in: [track] } })
@@ -135,17 +173,23 @@ class UserService {
                     return User.findOneAndUpdate(
                         { _id: userId, 'playlists._id': playlistId },
                         { $push: { 'playlists.$.tracks': track } },
-                        { safe: true, upsert: true, new: true, fields: { _id: 0, playlists: 1 } })
+                        { safe: true, upsert: true, new: true, fields: { _id: 0, playlists: { $elemMatch: { _id: playlistId } } } })
                         .exec() // Para que devuelva un Promise.
                 }
                 return null
             })
     }
 
-    removeTrackToPlaylist(userId, playlistId, track) {
-        return false
+    removeTrackFromPlaylist(userId, playlistId, track) {
+        debug('removeTrackFromPlaylist', userId, playlistId)
+        return User.findOneAndUpdate(
+            { _id: userId, 'playlists._id': playlistId },
+            { $pull: { 'playlists.$.tracks': track } },
+            { new: true, fields: { _id: 0, playlists: { $elemMatch: { _id: playlistId } } } })
+            .exec() // Para que devuelva un Promise.
     }
 
+// api/v1//location
     updateLastCoordinates(userId, coordinates) {
         return false
     }
