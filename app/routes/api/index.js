@@ -28,9 +28,9 @@ api.get('/', (req, res) => {
         })
 })
 
-api.use('/album', require('./router-album'))
-api.use('/track', require('./router-track'))
-api.use('/playlist', require('./router-playlist'))
+api.use('/albums', require('./router-album'))
+api.use('/tracks', require('./router-track'))
+api.use('/playlists', require('./router-playlist'))
 api.use('/user', require('./router-user'))
 
 module.exports = api
