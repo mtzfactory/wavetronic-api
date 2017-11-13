@@ -101,6 +101,24 @@ user.route('/friends/:friendId')
             .catch( error => res.status(404).json(error.message) )
     })
 
+user.route('/friends/:friendId/track/:trackId')
+    .get(function(req, res) {
+        const reqStart = new Date().getTime()
+        const { id: userId, username } = req.user // Passport
+        const { page, limit, show, hide } = req // middleware del router api (index.js)
+        const { friendId, track } = req.params
+
+        userService.sendTrackToFriend(userId, friendId, track)
+            .then( data => {
+                res.status(200).json({
+                    status: 'success',
+                    headers: { response_time: new Date().getTime() - reqStart },
+                    data
+                }) 
+            })
+            .catch( error => res.status(404).json(error.message) )
+    })
+
 user.route('/playlists')
     .get(function(req, res) {
         const reqStart = new Date().getTime()

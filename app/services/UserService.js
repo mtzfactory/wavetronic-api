@@ -30,15 +30,6 @@ class UserService {
         return User.find(filter, projection).exec() // Para que devuelva un Promise.
     }
 
-    // _listAllMy(list, userId, options) {
-    //     const showOnlyFriends = Object.assign({}, options)
-    //     showOnlyFriends.show = list
-
-    //     return this._query(() => {
-    //             if (!userId) throw new Error(`userId cannot be ${user}`)
-    //         }, { _id: userId }, showOnlyFriends, true)
-    // }
-
     _query(validate, conditions, options, single) {
         return Promise.resolve()
             .then(() => {
@@ -120,6 +111,12 @@ class UserService {
             { $pull: { friends: { username: friend } } },
             { new: true, fields: { _id: 0, 'friends.username': 1 } })
             .exec() // Para que devuelva un Promise.
+    }
+
+// apiv/v1/user/friends/:friendId/track/:trackId
+    sendTrackToFriend(userId, friend, track) {
+        return Promise.reject()
+            .catch( () => { throw new Error('not implemented yet') })
     }
 
 // api/v1/user/playlists
