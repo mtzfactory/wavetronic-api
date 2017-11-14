@@ -20,7 +20,8 @@ const User = new mongoose.Schema({
             name: String,
             description: String,
             creation_date: { type: Date, default: Date.now },
-            tracks: [ Number ]
+            tracks: [ Number ],
+            amount: { type: Number, default: 0 }
         }
     ]    
 })

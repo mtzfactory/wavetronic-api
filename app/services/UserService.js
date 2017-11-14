@@ -123,21 +123,21 @@ class UserService {
     getPlaylists(userId, options) {
         debug('getPlaylists', userId)
         //return this._listAllMy('playlists', userId, options)
-        options.show = 'playlists.name,playlists._id'
+        options.show = 'playlists.name,playlists._id,playlists.amount'
         return this._query(() => {
                 if (!userId) throw new Error(`userId cannot be ${user}`)
             }, { _id: userId }, options, true)
     }
 
     addPlaylist(userId, name, description) {
-        debug('addPlaylist', userId, playlist)
+        debug('addPlaylist', userId, name)
         return this._isInTheList(userId, 'playlists', { $elemMatch: { name } })
             .then( playlists => {
                 if (playlists.length === 0) {
                     return  User.findOneAndUpdate(
                         userId,
                         { $push: { playlists: { name, description } } },
-                        { safe: true, upsert: true, new: true, fields: { _id: 0, 'playlists._id': 1, 'playlists.name': 1 } })
+                        { safe: true, upsert: true, new: true, fields: { _id: 0, 'playlists._id': 1, 'playlists.name': 1, 'playlists.amount': 1 } })
                         .exec() // Para que devuelva un Promise.
                 }
                 return null
@@ -169,7 +169,7 @@ class UserService {
                 if (playlists.length === 0) {
                     return User.findOneAndUpdate(
                         { _id: userId, 'playlists._id': playlistId },
-                        { $push: { 'playlists.$.tracks': track } },
+                        { $push: { 'playlists.$.tracks': track }, $inc: { 'playlists.$.amount' : 1 } },
                         { safe: true, upsert: true, new: true, fields: { _id: 0, playlists: { $elemMatch: { _id: playlistId } } } })
                         .exec() // Para que devuelva un Promise.
                 }
@@ -181,7 +181,7 @@ class UserService {
         debug('removeTrackFromPlaylist', userId, playlistId)
         return User.findOneAndUpdate(
             { _id: userId, 'playlists._id': playlistId },
-            { $pull: { 'playlists.$.tracks': track } },
+            { $pull: { 'playlists.$.tracks': track }, $inc: { 'playlists.$.amount' : -1 } },
             { new: true, fields: { _id: 0, playlists: { $elemMatch: { _id: playlistId } } } })
             .exec() // Para que devuelva un Promise.
     }
