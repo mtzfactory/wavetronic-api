@@ -1,6 +1,6 @@
 const express = require('express')
 const jsonTransform = require('express-json-transform')
-const userBusiness = require('../../business/User')
+const User = require('../../business/User')
 
 const user = express.Router()
 
@@ -22,15 +22,15 @@ user.route('/')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const options = { page, limit, show, hide }
 
-        userBusiness.getUserProfile(userId)
-            .then( data => {
+        User.getUserProfile(userId)
+            .then( results => {
                 res.status(200).json({
                     status: 'success',
                     headers: { response_time: new Date().getTime() - reqStart },
-                    data
+                    results
                 }) 
             })
-            .catch( error => res.status(404).json(error.message) )
+            .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
 
 user.route('/friends')
@@ -40,15 +40,15 @@ user.route('/friends')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const options = { page, limit, show, hide }
         
-        userBusiness.getFriends(userId, options)
-            .then( data => {
+        User.getFriends(userId, options)
+            .then( results => {
                 res.status(200).json({
                     status: 'success',
                     headers: { page, limit, response_time: new Date().getTime() - reqStart },
-                    data
+                    results
                 }) 
             })
-            .catch( error => res.status(404).json(error.message) )
+            .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
     .post(function(req, res) {
         const reqStart = new Date().getTime()
@@ -56,15 +56,15 @@ user.route('/friends')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const { name } = req.body
 
-        userBusiness.addFriend(userId, name)
-            .then( data => {
+        User.addFriend(userId, name)
+            .then( results => {
                 res.status(200).json({
                     status: 'success',
                     headers: { response_time: new Date().getTime() - reqStart },
-                    data
+                    results
                 }) 
             })
-            .catch( error => res.status(404).json(error.message) )
+            .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
 
 user.route('/friends/:friendId')
@@ -74,15 +74,15 @@ user.route('/friends/:friendId')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const { friendId } = req.params
         
-        userBusiness.updateFriendship(userId, friendId)
-            .then( data => {
+        User.updateFriendship(userId, friendId)
+            .then( results => {
                 res.status(200).json({
                     status: 'success',
                     headers: { response_time: new Date().getTime() - reqStart },
-                    data
+                    results
                 }) 
             })
-            .catch( error => res.status(404).json(error.message) )
+            .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
     .delete(function(req, res) {
         const reqStart = new Date().getTime()
@@ -90,15 +90,15 @@ user.route('/friends/:friendId')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const { friendId } = req.params
 
-        userBusiness.removeFriend(userId, friendId)
-            .then( data => {
+        User.removeFriend(userId, friendId)
+            .then( results => {
                 res.status(200).json({
                     status: 'success',
                     headers: { response_time: new Date().getTime() - reqStart },
-                    data
+                    results
                 }) 
             })
-            .catch( error => res.status(404).json(error.message) )
+            .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
 
 user.route('/friends/:friendId/track/:trackId')
@@ -108,15 +108,15 @@ user.route('/friends/:friendId/track/:trackId')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const { friendId, track } = req.params
 
-        userBusiness.sendTrackToFriend(userId, friendId, track)
-            .then( data => {
+        User.sendTrackToFriend(userId, friendId, track)
+            .then( results => {
                 res.status(200).json({
                     status: 'success',
                     headers: { response_time: new Date().getTime() - reqStart },
-                    data
+                    results
                 }) 
             })
-            .catch( error => res.status(404).json(error.message) )
+            .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
 
 user.route('/playlists')
@@ -126,15 +126,15 @@ user.route('/playlists')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const options = { page, limit, show, hide }
         
-        userBusiness.getPlaylists(userId, options)
-            .then( data => {
+        User.getPlaylists(userId, options)
+            .then( results => {
                 res.status(200).json({
                     status: 'success',
                     headers: { page, limit, response_time: new Date().getTime() - reqStart },
-                    data
+                    results
                 }) 
             })
-            .catch( error => res.status(404).json(error.message) )
+            .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
     .post(function(req, res) {
         const reqStart = new Date().getTime()
@@ -142,15 +142,15 @@ user.route('/playlists')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const { name, description } = req.body
 
-        userBusiness.addPlaylist(userId, name, description)
-            .then( data => {
+        User.addPlaylist(userId, name, description)
+            .then( results => {
                 res.status(200).json({
                     status: 'success',
                     headers: { response_time: new Date().getTime() - reqStart },
-                    data
+                    results
                 }) 
             })
-            .catch( error => res.status(404).json(error.message) )
+            .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
 
 
@@ -161,15 +161,15 @@ user.route('/playlists/:playlistId')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const { playlistId } = req.params
 
-        userBusiness.getTracksFromPlaylist(userId, playlistId)
-            .then( data => {
+        User.getTracksFromPlaylist(userId, playlistId)
+            .then( results => {
                 res.status(200).json({
                     status: 'success',
                     headers: { response_time: new Date().getTime() - reqStart },
-                    data
+                    results
                 }) 
             })
-            .catch( error => res.status(404).json(error.message) )
+            .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
     .delete(function(req, res) {
         const reqStart = new Date().getTime()
@@ -177,15 +177,15 @@ user.route('/playlists/:playlistId')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const { playlistId } = req.params
 
-        userBusiness.removePlaylist(userId, playlistId)
-            .then( data => {
+        User.removePlaylist(userId, playlistId)
+            .then( results => {
                 res.status(200).json({
                     status: 'success',
                     headers: { response_time: new Date().getTime() - reqStart },
-                    data
+                    results
                 }) 
             })
-            .catch( error => res.status(404).json(error.message) )
+            .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
 
 user.route('/playlists/:playlistId/track/:trackId')
@@ -195,15 +195,15 @@ user.route('/playlists/:playlistId/track/:trackId')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const { playlistId, trackId } = req.params
 
-        userBusiness.addTrackToPlaylist(userId, playlistId, trackId)
-            .then( data => {
+        User.addTrackToPlaylist(userId, playlistId, trackId)
+            .then( results => {
                 res.status(200).json({
                     status: 'success',
                     headers: { response_time: new Date().getTime() - reqStart },
-                    data
+                    results
                 }) 
             })
-            .catch( error => res.status(404).json(error.message) )
+            .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
     .delete(function(req, res) {
         const reqStart = new Date().getTime()
@@ -211,15 +211,15 @@ user.route('/playlists/:playlistId/track/:trackId')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const { playlistId, trackId } = req.params
 
-        userBusiness.removeTrackFromPlaylist(userId, playlistId, trackId)
-            .then( data => {
+        User.removeTrackFromPlaylist(userId, playlistId, trackId)
+            .then( results => {
                 res.status(200).json({
                     status: 'success',
                     headers: { response_time: new Date().getTime() - reqStart },
-                    data
+                    results
                 }) 
             })
-            .catch( error => res.status(404).json(error.message) )
+            .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
 
 module.exports = user

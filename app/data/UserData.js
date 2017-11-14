@@ -1,7 +1,6 @@
-const debug = require('debug')('usr')
-const User = require('./data/models/UserModel')
+const User = require('./models/UserModel')
 
-function validateOptions(options) {
+function validateOptions (options) {
     if (!options.page || typeof options.page !== 'number')
         throw new Error(`page cannot be ${options.page}`)
 
@@ -15,28 +14,22 @@ function validateOptions(options) {
         throw new Error(`hide cannot be ${options.hide}`)
 }
 
-function normalizePlaylist(data) {
+function normalizePlaylist (data) {
     return data.playlists.map(function(item) {
         return { id: item._id, name: item.name, description: item.description, amount: itme.amount, creation_date: item.creation_date  }
     })
 }
 
 class UserData {
-    _getIdByUsername(username) {
-        return this._query(() => {
-            if (!username) throw new Error(`username cannot be ${username}`)
-        }, { username }, { show: '_id' }, true)
-        .then( ({ _id }) => _id)
-    }
-
-    _isInTheList(userId, list, condition) {
+    _isInTheList (userId, list, condition) {
         const filter = {}; filter._id = userId; filter[list] = condition
-        const projection = {}; projection._id = 0; projection[list] = 1
+        const projection = {}; projection._id = 0; projection[list + '.$'] = 1
         
-        return User.find(filter, projection).exec() // Para que devuelva un Promise.
+        return User.findOne(filter, projection).exec() // Para que devuelva un Promise.
+        //return User.find(filter, projection).exec() // Para que devuelva un Promise.
     }
 
-    _query(validate, conditions, options, single) {
+    _query (validate, conditions, options, single) {
         return Promise.resolve()
             .then(() => {
                 if (validate) validate()
@@ -55,141 +48,142 @@ class UserData {
             })
     }
 
-    updateLastLogin(userId) {
+    updateLastLogin (userId) {
         return User.findOneAndUpdate(userId, { last_login: new Date() } )
             .exec() // Para que devuelva un Promise.
     }
 
-    updateUserVerified(user, options) {
+    updateUserVerified (user, options) {
         return false
     }
 
+    getIdByUsername (username) {
+        return this._query(() => {
+                if (!username) throw new Error(`username cannot be ${username}`)
+            }, { username }, { show: '_id' }, true)
+            .then( docs => { return docs ? docs.id : null })
+    }
+
 // /user
-    getUserProfile(userId) {
-        debug('getUserProfile', userId)
+    getUserProfile (userId) {
         return this._query(() => {
                 if (!userId) throw new Error(`userId cannot be ${user}`)
             }, { _id: userId }, { hide: '_id,playlists._id,friends._id' }, true)
     }
 
 // /user/friends
-    getFriends(userId, options) {
-        debug('getFriends', userId)
-        //return this._listAllMy('friends', userId, options)
+    getFriends (userId, options) {
         options.show = 'friends.username,friends.confirmed'
         return this._query(() => {
                 if (!userId) throw new Error(`userId cannot be ${user}`)
             }, { _id: userId }, options, true)
+            .then(({friends}) => friends)
     }
 
-    addFriend(userId, friend) {
-        debug('addFriend', userId, friend)
-        return this._getIdByUsername(friend)
-            .then( friendId => {
-                return this._isInTheList(userId, 'friends', { $elemMatch: { username: friend } })
-                    .then( friends => {
-                        if (friends.length === 0) {
-                            return  User.findOneAndUpdate(
-                                userId,
-                                { $push: { friends: { _id: friendId, username: friend } } },
-                                { safe: true, upsert: true, new: true, fields: { _id: 0, 'friends.username': 1 } })
-                                .exec() // Para que devuelva un Promise.
-                        }
-                        return null
-                    })
-            })
+    retrieveFriendById (userId, friendId) {
+        return this._isInTheList(userId, 'friends', { $elemMatch: { _id: friendId } })
+            .then(docs => { return docs ? docs.friends[0] : null })
+    }
+
+    addFriend (userId, friendId, friend) {
+        console.log('data -> addFriend userId', userId, friendId, friend)
+        return  User.findOneAndUpdate(
+            userId,
+            { $push: { friends: { _id: friendId, username: friend } } },
+            { safe: true, upsert: false, new: true, fields: { _id:0, 'friends.username': 1, 'friends.confirmed': 1 } })
+            .exec() // Para que devuelva un Promise.
+            .then(({friends}) => friends)
     }
 
 // /user/friends/:friendId
-    updateFriendship(userId, friend) {
-        debug('updateFriendship', userId, friend)
+    updateFriendship (userId, friend) {
         return User.findOneAndUpdate(
             { _id: userId, 'friends.username': friend },
             { 'friends.$.confirmed': true },
             { new: true, fields: { _id: 0, 'friends.username': 1, 'friends.confirmed': 1 } })
             .exec() // Para que devuelva un Promise.
+            .then(({friends}) => friends)
     }
 
-    removeFriend(userId, friend) {
-        debug('removeFriend', userId, friend)
+    removeFriend (userId, friend) {
         return User.findOneAndUpdate(
             userId,
             { $pull: { friends: { username: friend } } },
-            { new: true, fields: { _id: 0, 'friends.username': 1 } })
+            { new: true, fields: { _id: 0, 'friends.username': 1, 'friends.confirmed': 1 } })
             .exec() // Para que devuelva un Promise.
+            .then(({friends}) => friends)
     }
 
 // /user/friends/:friendId/track/:trackId
-    sendTrackToFriend(userId, friend, track) {
+    sendTrackToFriend (userId, friend, track) {
         return Promise.reject()
             .catch( () => { throw new Error('not implemented yet') })
     }
 
 // /user/playlists
-    getPlaylists(userId, options) {
-        debug('getPlaylists', userId)
-        //return this._listAllMy('playlists', userId, options)
-        options.show = 'playlists.name,playlists._id,playlists.amount'
+    getPlaylists (userId, options) {
+        options.show = 'playlists.name,playlists._id,playlists.amount,playlists.creation_date'
         return this._query(() => {
                 if (!userId) throw new Error(`userId cannot be ${user}`)
             }, { _id: userId }, options, true)
+            .then(({playlists}) => playlists)
     }
 
-    addPlaylist(userId, name, description) {
-        debug('addPlaylist', userId, name)
+    retrievePlaylistIdByName (userId, name) {
         return this._isInTheList(userId, 'playlists', { $elemMatch: { name } })
-            .then( playlists => {
-                if (playlists.length === 0) {
-                    return  User.findOneAndUpdate(
-                        userId,
-                        { $push: { playlists: { name, description } } },
-                        { safe: true, upsert: true, new: true, fields: { _id: 0, 'playlists._id': 1, 'playlists.name': 1, 'playlists.amount': 1 } })
-                        .exec() // Para que devuelva un Promise.
-                }
-                return null
-            })
+    }
+
+    addPlaylist (userId, name, description) {
+        const fields = { _id: 0, 'playlists._id': 1, 'playlists.name': 1, 'playlists.amount': 1, 'playlists.creation_date': 1 }
+        return User.findOneAndUpdate(
+            userId,
+            { $push: { playlists: { name, description } } },
+            { safe: true, upsert: true, new: true, fields })
+            .exec() // Para que devuelva un Promise.
+            .then(({playlists}) => playlists)
     }
 
 // /user/playlists/:playlistId
-    getTracksFromPlaylist(userId, playlistId) {
-        debug('getTracksFromPlaylist', userId, playlistId)
-        return User.findOne({ _id: userId, 'playlists._id': playlistId }, { _id: 0, 'playlists.$.tracks': 1 })
+    getTracksFromPlaylist (userId, playlistId) {
+        const projection = { _id: 0, 'playlists.$.tracks': 1 }
+        return User.findOne({ _id: userId, 'playlists._id': playlistId }, projection)
             .exec()
+            .then(({playlists}) => { console.log('getTracksFromPlaylist', playlists); return playlists[0].tracks })
+            //.then(({playlists:{tracks}}) => { console.log(tracks); return tracks})
     }
 
-    removePlaylist(userId, playlistId) {
-        debug('removePlaylist', userId, playlistId)
+    removePlaylist (userId, playlistId) {
         return User.findOneAndUpdate(
             userId,
             { $pull: { playlists: { _id: playlistId } } },
-            { new: true, fields: { _id: 0, 'playlists._id': 1, 'playlists.name': 1, 'playlists.amount': 1 } })
+            { new: true, fields: { _id: 0, 'playlists._id': 1, 'playlists.name': 1, 'playlists.amount': 1, 'playlists.creation_date': 1 } })
             .exec() // Para que devuelva un Promise.
+            .then(({playlists}) => playlists)
     }
 
 // /user/playlists/:playlistId/track/:trackId
-    addTrackToPlaylist(userId, playlistId, track) {
-        debug('addTrackToPlaylist', userId, playlistId, track)
-        return User.find({ _id: userId, 'playlists._id': playlistId, 'playlists.tracks': {$in: [track] } })
-            .exec()
-            .then( playlists => {
-                if (playlists.length === 0) {
-                    return User.findOneAndUpdate(
-                        { _id: userId, 'playlists._id': playlistId },
-                        { $push: { 'playlists.$.tracks': track }, $inc: { 'playlists.$.amount' : 1 } },
-                        { safe: true, upsert: true, new: true, fields: { _id: 0, playlists: { $elemMatch: { _id: playlistId } } } })
-                        .exec() // Para que devuelva un Promise.
-                }
-                return null
-            })
+    isTrackAlredyInThePlaylist (userId, playlistId, track) {
+        const projection = { _id: 0, 'playlists.$.tracks': 1 }
+        return User.findOne({ _id: userId, 'playlists._id': playlistId, 'playlists.$.tracks': {$in: [track] } }, projection)
+            .then(docs => { return docs ? docs.playlists[0] : null })
+    }
+
+    addTrackToPlaylist (userId, playlistId, track) {
+        return User.findOneAndUpdate(
+            { _id: userId, 'playlists._id': playlistId },
+            { $push: { 'playlists.$.tracks': track }, $inc: { 'playlists.$.amount' : 1 } },
+            { safe: true, upsert: true, new: true, fields: { _id: 0, playlists: { $elemMatch: { _id: playlistId } } } })
+            .exec() // Para que devuelva un Promise.
+            .then(({playlists}) => playlists[0])
     }
 
     removeTrackFromPlaylist(userId, playlistId, track) {
-        debug('removeTrackFromPlaylist', userId, playlistId)
         return User.findOneAndUpdate(
             { _id: userId, 'playlists._id': playlistId },
             { $pull: { 'playlists.$.tracks': track }, $inc: { 'playlists.$.amount' : -1 } },
             { new: true, fields: { _id: 0, playlists: { $elemMatch: { _id: playlistId } } } })
             .exec() // Para que devuelva un Promise.
+            .then(({playlists}) => playlists[0])
     }
 
 // /user/location

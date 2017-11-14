@@ -24,7 +24,7 @@ auth.post('/register', (req, res) => {
 
     if (!email) {
         return res.status(400).json({
-            status: 'KO',
+            status: 'error',
             message: 'Email not informed'
         })
     }
@@ -33,14 +33,14 @@ auth.post('/register', (req, res) => {
 
     User.register(user, password, err => {
         if (err) {
-            return res.json({
-                status: 'KO',
+            return res.status(401).json({
+                status: 'error',
                 message: err.message
             })
         }
 
-        res.json({
-            status: 'OK',
+        res.status(200).json({
+            status: 'success',
             message: `user '${username}' registered successfully`
         })
     })
@@ -51,11 +51,11 @@ auth.post('/login', passport.authenticate('local', { session: false }), (req, re
 
     const token = jwt.sign({ id, username }, API_SECRET)
 
-    const userService = require('../../services/UserService')
-    userService.updateLastLogin(id)
+    const user = require('../../business/User')
+    user.updateLastLogin(id)
 
-    res.json({
-        status: 'OK',
+    res.status(200).json({
+        status: 'success',
         message: `user '${username}' authenticated successfully`,
         data: token
     })

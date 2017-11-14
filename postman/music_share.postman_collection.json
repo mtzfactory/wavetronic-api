@@ -1,0 +1,767 @@
+{
+	"info": {
+		"name": "music_share",
+		"_postman_id": "30dc3705-b342-5407-a9d4-a1a83b13597e",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/api/v1//playlists",
+			"description": "",
+			"item": [
+				{
+					"name": "/api/v1/playlists ( Authorized )",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMDczMWUzZDkwOTZmMzI0NWU5M2M5OSIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDQyNDkwNn0.FRujPlleJJ-dTT9s6pe8G9OX1DFvFwlDuYXx9GB_56w"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/playlists?offset=1&limit=15",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"playlists"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "1",
+									"equals": true
+								},
+								{
+									"key": "limit",
+									"value": "15",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/api/v1/albums",
+			"description": "",
+			"item": [
+				{
+					"name": "/api/v1/albums ( Authorized )",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMDczMWUzZDkwOTZmMzI0NWU5M2M5OSIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDQyNDkwNn0.FRujPlleJJ-dTT9s6pe8G9OX1DFvFwlDuYXx9GB_56w"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/albums?offset=1&limit=15",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"albums"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "1",
+									"equals": true
+								},
+								{
+									"key": "limit",
+									"value": "15",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/api/v1/tracks",
+			"description": "",
+			"item": [
+				{
+					"name": "/api/v1/tracks ( Authorized )",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMDczMWUzZDkwOTZmMzI0NWU5M2M5OSIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDQyNDkwNn0.FRujPlleJJ-dTT9s6pe8G9OX1DFvFwlDuYXx9GB_56w"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/tracks?offset=1&limit=15",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"tracks"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "1",
+									"equals": true
+								},
+								{
+									"key": "limit",
+									"value": "15",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/api/v1/user",
+			"description": "",
+			"item": [
+				{
+					"name": "/api/v1/user (Get user)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"user"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/api/v1/user/friends",
+			"description": "",
+			"item": [
+				{
+					"name": "/api/v1/user/friends (Get friends)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/user/friends",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"friends"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/user/friends (Add friend)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"paco\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/user/friends",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"friends"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/api/v1/user/friends/:id",
+			"description": "",
+			"item": [
+				{
+					"name": "/api/v1/user/friends/:id (Update friendship)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/user/friends/eric",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"friends",
+								"eric"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/user/friends/:id (Delete friend)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/user/friends/jane",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"friends",
+								"jane"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/api/v1/user/friends/:id/track/:id",
+			"description": "",
+			"item": [
+				{
+					"name": "/api/v1/user/friends/:id/track/:track (Send track to friend)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/user/friends/eric/track/123456",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"friends",
+								"eric",
+								"track",
+								"123456"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/api/v1/user/playlist/:id/tracks/:id",
+			"description": "",
+			"item": [
+				{
+					"name": "/api/v1/user/playlists/:id/tracks/:id (Add track)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/user/playlists/5a0b0a4dac962c21ce132ba3/track/222",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"playlists",
+								"5a0b0a4dac962c21ce132ba3",
+								"track",
+								"222"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/user/playlists/:id/track/:id (Remove track)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/user/playlists/5a0b02417993f820449c4036/track/1123",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"playlists",
+								"5a0b02417993f820449c4036",
+								"track",
+								"1123"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/api/v1/user/playlists",
+			"description": "",
+			"item": [
+				{
+					"name": "/api/v1/user/playlists (Get  playlists)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/user/playlists",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"playlists"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/user/playlists (Add  playlists)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"playlist-1\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/user/playlists",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"playlists"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/api/v1/user/playlists/:id",
+			"description": "",
+			"item": [
+				{
+					"name": "/api/v1/user/playlists/:id (Get tracks)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/user/playlists/5a0b0a4dac962c21ce132ba3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"playlists",
+								"5a0b0a4dac962c21ce132ba3"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/user/playlists/:id (Remove playlist)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/user/playlists/5a0b02417993f820449c4036",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"playlists",
+								"5a0b02417993f820449c4036"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/auth",
+			"description": "",
+			"item": [
+				{
+					"name": "/auth/register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"paco\",\n\t\"email\": \"paco@example.com\",\n\t\"password\": \"123\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"auth",
+								"register"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/auth/register (Email not informed)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"ricardo\",\n\t\"password\": \"123\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"auth",
+								"register"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/auth/login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"ricardo\",\n\t\"password\": \"123\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/auth/revoke",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3001/auth/revoke",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"auth",
+								"revoke"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "jamendo",
+			"description": "",
+			"item": [
+				{
+					"name": "/jamendo/auth",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3001/jamendo/auth",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"jamendo",
+								"auth"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/api/v1 (Welcome, Authorized)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMDczMWUzZDkwOTZmMzI0NWU5M2M5OSIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDQyNDkwNn0.FRujPlleJJ-dTT9s6pe8G9OX1DFvFwlDuYXx9GB_56w"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3001/api/v1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"api",
+						"v1"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/api/v1( Unauthorized )",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3001/api/v1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"api",
+						"v1"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
