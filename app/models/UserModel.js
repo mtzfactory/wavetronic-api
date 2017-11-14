@@ -18,6 +18,8 @@ const User = new mongoose.Schema({
     playlists: [
         {
             name: String,
+            description: String,
+            creation_date: { type: Date, default: Date.now },
             tracks: [ Number ]
         }
     ]    

@@ -58,7 +58,7 @@ class UserService {
         return false
     }
 
-// api/v1/user
+// /user
     getUserProfile(userId) {
         debug('getUserProfile', userId)
         return this._query(() => {
@@ -66,7 +66,7 @@ class UserService {
             }, { _id: userId }, { hide: '_id,playlists._id,friends._id' }, true)
     }
 
-// apiv/v1/user/friends
+// /user/friends
     getFriends(userId, options) {
         debug('getFriends', userId)
         //return this._listAllMy('friends', userId, options)
@@ -94,7 +94,7 @@ class UserService {
             })
     }
 
-// apiv/v1/user/friends/:friendId
+// /user/friends/:friendId
     updateFriendship(userId, friend) {
         debug('updateFriendship', userId, friend)
         return User.findOneAndUpdate(
@@ -113,13 +113,13 @@ class UserService {
             .exec() // Para que devuelva un Promise.
     }
 
-// apiv/v1/user/friends/:friendId/track/:trackId
+// /user/friends/:friendId/track/:trackId
     sendTrackToFriend(userId, friend, track) {
         return Promise.reject()
             .catch( () => { throw new Error('not implemented yet') })
     }
 
-// api/v1/user/playlists
+// /user/playlists
     getPlaylists(userId, options) {
         debug('getPlaylists', userId)
         //return this._listAllMy('playlists', userId, options)
@@ -129,14 +129,14 @@ class UserService {
             }, { _id: userId }, options, true)
     }
 
-    addPlaylist(userId, playlist) {
+    addPlaylist(userId, name, description) {
         debug('addPlaylist', userId, playlist)
-        return this._isInTheList(userId, 'playlists', { $elemMatch: { name: playlist } })
+        return this._isInTheList(userId, 'playlists', { $elemMatch: { name } })
             .then( playlists => {
                 if (playlists.length === 0) {
                     return  User.findOneAndUpdate(
                         userId,
-                        { $push: { playlists: { name: playlist } } },
+                        { $push: { playlists: { name, description } } },
                         { safe: true, upsert: true, new: true, fields: { _id: 0, 'playlists._id': 1, 'playlists.name': 1 } })
                         .exec() // Para que devuelva un Promise.
                 }
@@ -144,7 +144,7 @@ class UserService {
             })
     }
 
-// api/v1//playlists/:playlistId
+// /user/playlists/:playlistId
     getTracksFromPlaylist(userId, playlistId) {
         debug('getTracksFromPlaylist', userId, playlistId)
         return User.findOne({ _id: userId, 'playlists._id': playlistId }, { _id: 0, 'playlists.$.tracks': 1 })
@@ -160,7 +160,7 @@ class UserService {
             .exec() // Para que devuelva un Promise.
     }
 
-// api/v1//playlists/:playlistId/track/:trackId
+// /user/playlists/:playlistId/track/:trackId
     addTrackToPlaylist(userId, playlistId, track) {
         debug('addTrackToPlaylist', userId, playlistId, track)
         return User.find({ _id: userId, 'playlists._id': playlistId, 'playlists.tracks': {$in: [track] } })
@@ -186,7 +186,7 @@ class UserService {
             .exec() // Para que devuelva un Promise.
     }
 
-// api/v1//location
+// /user/location
     updateLastCoordinates(userId, coordinates) {
         return false
     }

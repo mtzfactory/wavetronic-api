@@ -140,9 +140,9 @@ user.route('/playlists')
         const reqStart = new Date().getTime()
         const { id: userId, username } = req.user // Passport
         const { page, limit, show, hide } = req // middleware del router api (index.js)
-        const { name } = req.body
+        const { name, description } = req.body
 
-        userService.addPlaylist(userId, name)
+        userService.addPlaylist(userId, name, description)
             .then( data => {
                 res.status(200).json({
                     status: 'success',
