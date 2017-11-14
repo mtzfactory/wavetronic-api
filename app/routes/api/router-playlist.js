@@ -1,6 +1,6 @@
 const express = require('express')
 const jsonTransform = require('express-json-transform')
-const musicService = require('../../services/MusicService')
+const musicBusiness = require('../../business/Music')
 
 const playlist = express.Router()
 
@@ -37,7 +37,7 @@ playlist.route('/')
             order: 'creationdate_desc'
         }
 
-        musicService.getPlaylists(options)
+        musicBusiness.getPlaylists(options)
             .then( data => {
                 data.headers.response_time = new Date().getTime() - reqStart
                 data.headers.offset = offset
@@ -59,7 +59,7 @@ playlist.route('/search/:namesearch')
             order: 'creationdate_desc'
         }
 
-        musicService.getPlaylists(options)
+        musicBusiness.getPlaylists(options)
             .then( data => {
                 data.headers.response_time = new Date().getTime() - reqStart
                 data.headers.offset = offset
@@ -77,7 +77,7 @@ playlist.route('/id/:playlist_id')
             id: req.params.playlist_id,
         }
 
-        musicService.getPlaylistTracks(options)
+        musicBusiness.getPlaylistTracks(options)
             .then( data => {
                 data.headers.response_time = new Date().getTime() - reqStart
                 res.status(200).json(data) 

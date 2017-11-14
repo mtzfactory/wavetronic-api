@@ -1,7 +1,7 @@
 const { JAMENDO_CLIENT_ID } = require('../constants')
 const { jamendo } = require('../jamendo')
 
-class MusicService {
+class MusicBusiness {
     constructor() {
         this.parameters = {
             client_id: JAMENDO_CLIENT_ID,
@@ -64,4 +64,4 @@ class MusicService {
 }
 
 // exportamos uns singleton...
-module.exports = new MusicService()
+module.exports = new MusicBusiness()

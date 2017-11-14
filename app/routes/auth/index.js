@@ -2,7 +2,7 @@ const express = require('express')
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
 const debug = require('debug')('auth')
-const User = require('../../models/UserModel')
+const User = require('../../data/models/UserModel')
 
 const { DEBUG, API_SECRET } = require('../../constants')
 

@@ -1,6 +1,6 @@
 const express = require('express')
 const jsonTransform = require('express-json-transform')
-const userService = require('../../services/UserService')
+const userBusiness = require('../../business/User')
 
 const user = express.Router()
 
@@ -22,7 +22,7 @@ user.route('/')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const options = { page, limit, show, hide }
 
-        userService.getUserProfile(userId)
+        userBusiness.getUserProfile(userId)
             .then( data => {
                 res.status(200).json({
                     status: 'success',
@@ -40,7 +40,7 @@ user.route('/friends')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const options = { page, limit, show, hide }
         
-        userService.getFriends(userId, options)
+        userBusiness.getFriends(userId, options)
             .then( data => {
                 res.status(200).json({
                     status: 'success',
@@ -56,7 +56,7 @@ user.route('/friends')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const { name } = req.body
 
-        userService.addFriend(userId, name)
+        userBusiness.addFriend(userId, name)
             .then( data => {
                 res.status(200).json({
                     status: 'success',
@@ -74,7 +74,7 @@ user.route('/friends/:friendId')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const { friendId } = req.params
         
-        userService.updateFriendship(userId, friendId)
+        userBusiness.updateFriendship(userId, friendId)
             .then( data => {
                 res.status(200).json({
                     status: 'success',
@@ -90,7 +90,7 @@ user.route('/friends/:friendId')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const { friendId } = req.params
 
-        userService.removeFriend(userId, friendId)
+        userBusiness.removeFriend(userId, friendId)
             .then( data => {
                 res.status(200).json({
                     status: 'success',
@@ -108,7 +108,7 @@ user.route('/friends/:friendId/track/:trackId')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const { friendId, track } = req.params
 
-        userService.sendTrackToFriend(userId, friendId, track)
+        userBusiness.sendTrackToFriend(userId, friendId, track)
             .then( data => {
                 res.status(200).json({
                     status: 'success',
@@ -126,7 +126,7 @@ user.route('/playlists')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const options = { page, limit, show, hide }
         
-        userService.getPlaylists(userId, options)
+        userBusiness.getPlaylists(userId, options)
             .then( data => {
                 res.status(200).json({
                     status: 'success',
@@ -142,7 +142,7 @@ user.route('/playlists')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const { name, description } = req.body
 
-        userService.addPlaylist(userId, name, description)
+        userBusiness.addPlaylist(userId, name, description)
             .then( data => {
                 res.status(200).json({
                     status: 'success',
@@ -161,7 +161,7 @@ user.route('/playlists/:playlistId')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const { playlistId } = req.params
 
-        userService.getTracksFromPlaylist(userId, playlistId)
+        userBusiness.getTracksFromPlaylist(userId, playlistId)
             .then( data => {
                 res.status(200).json({
                     status: 'success',
@@ -177,7 +177,7 @@ user.route('/playlists/:playlistId')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const { playlistId } = req.params
 
-        userService.removePlaylist(userId, playlistId)
+        userBusiness.removePlaylist(userId, playlistId)
             .then( data => {
                 res.status(200).json({
                     status: 'success',
@@ -195,7 +195,7 @@ user.route('/playlists/:playlistId/track/:trackId')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const { playlistId, trackId } = req.params
 
-        userService.addTrackToPlaylist(userId, playlistId, trackId)
+        userBusiness.addTrackToPlaylist(userId, playlistId, trackId)
             .then( data => {
                 res.status(200).json({
                     status: 'success',
@@ -211,7 +211,7 @@ user.route('/playlists/:playlistId/track/:trackId')
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const { playlistId, trackId } = req.params
 
-        userService.removeTrackFromPlaylist(userId, playlistId, trackId)
+        userBusiness.removeTrackFromPlaylist(userId, playlistId, trackId)
             .then( data => {
                 res.status(200).json({
                     status: 'success',

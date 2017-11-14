@@ -1,6 +1,6 @@
 const passport = require('passport')
 const passportJwt = require('passport-jwt')
-const User = require('../models/UserModel')
+const User = require('../data/models/UserModel')
 
 function init(secret) {
     passport.use(User.createStrategy())

@@ -1,5 +1,5 @@
 const debug = require('debug')('usr')
-const User = require('../models/UserModel')
+const User = require('./data/models/UserModel')
 
 function validateOptions(options) {
     if (!options.page || typeof options.page !== 'number')
@@ -15,7 +15,13 @@ function validateOptions(options) {
         throw new Error(`hide cannot be ${options.hide}`)
 }
 
-class UserService {
+function normalizePlaylist(data) {
+    return data.playlists.map(function(item) {
+        return { id: item._id, name: item.name, description: item.description, amount: itme.amount, creation_date: item.creation_date  }
+    })
+}
+
+class UserData {
     _getIdByUsername(username) {
         return this._query(() => {
             if (!username) throw new Error(`username cannot be ${username}`)
@@ -156,7 +162,7 @@ class UserService {
         return User.findOneAndUpdate(
             userId,
             { $pull: { playlists: { _id: playlistId } } },
-            { new: true, fields: { _id: 0, 'playlists._id': 1, 'playlists.name': 1 } })
+            { new: true, fields: { _id: 0, 'playlists._id': 1, 'playlists.name': 1, 'playlists.amount': 1 } })
             .exec() // Para que devuelva un Promise.
     }
 
@@ -192,4 +198,4 @@ class UserService {
     }
 }
 // exportamos uns singleton...
-module.exports = new UserService()
+module.exports = new UserData()

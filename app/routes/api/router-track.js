@@ -1,6 +1,6 @@
 const express = require('express')
 const jsonTransform = require('express-json-transform')
-const musicService = require('../../services/MusicService')
+const musicBusiness = require('../../business/Music')
 
 const track = express.Router()
 
@@ -38,7 +38,7 @@ track.route('/')
             featured: true
         }
 
-        musicService.getTracks(options)
+        musicBusiness.getTracks(options)
             .then( data => {
                 data.headers.response_time = new Date().getTime() - reqStart
                 data.headers.offset = offset
@@ -61,7 +61,7 @@ track.route('/tags/:fuzzytags')
             fuzzytags: req.params.fuzzytags
         }
 
-        musicService.getTracks(options)
+        musicBusiness.getTracks(options)
             .then( data => {
                 data.headers.response_time = new Date().getTime() - reqStart
                 data.headers.offset = offset
