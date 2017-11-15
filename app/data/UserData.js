@@ -24,7 +24,7 @@ class UserData {
     _isInTheList (userId, list, condition) {
         const filter = {}; filter._id = userId; filter[list] = condition
         const projection = {}; projection._id = 0; projection[list + '.$'] = 1
-        
+
         return User.findOne(filter, projection).exec() // Para que devuelva un Promise.
         //return User.find(filter, projection).exec() // Para que devuelva un Promise.
     }
@@ -43,7 +43,7 @@ class UserData {
                     options.select += ' ' + options.show.split(',').join(' ')
 
                 return single
-                    ? User.findOne(conditions, options.select) 
+                    ? User.findOne(conditions, options.select)
                     : User.paginate(conditions, options)
             })
     }
@@ -122,7 +122,7 @@ class UserData {
 
 // /user/playlists
     getPlaylists (userId, options) {
-        options.show = 'playlists.name,playlists._id,playlists.amount,playlists.creation_date'
+        options.show = 'playlists.name,playlists._id,playlists.amount,playlists.creation_date,playlists.description'
         return this._query(() => {
                 if (!userId) throw new Error(`userId cannot be ${user}`)
             }, { _id: userId }, options, true)
@@ -134,7 +134,7 @@ class UserData {
     }
 
     addPlaylist (userId, name, description) {
-        const fields = { _id: 0, 'playlists._id': 1, 'playlists.name': 1, 'playlists.amount': 1, 'playlists.creation_date': 1 }
+        const fields = { _id: 0, 'playlists._id': 1, 'playlists.name': 1, 'playlists.amount': 1, 'playlists.creation_date': 1, 'playlists.description': 1 }
         return User.findOneAndUpdate(
             userId,
             { $push: { playlists: { name, description } } },
@@ -153,10 +153,11 @@ class UserData {
     }
 
     removePlaylist (userId, playlistId) {
+      const fields = : { _id: 0, 'playlists._id': 1, 'playlists.name': 1, 'playlists.amount': 1, 'playlists.creation_date': 1, 'playlists.description': 1 }
         return User.findOneAndUpdate(
             userId,
             { $pull: { playlists: { _id: playlistId } } },
-            { new: true, fields: { _id: 0, 'playlists._id': 1, 'playlists.name': 1, 'playlists.amount': 1, 'playlists.creation_date': 1 } })
+            { new: true, fields })
             .exec() // Para que devuelva un Promise.
             .then(({playlists}) => playlists)
     }
