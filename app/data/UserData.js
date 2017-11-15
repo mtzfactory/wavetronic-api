@@ -162,7 +162,7 @@ class UserData {
         const projection = { _id: 0, 'playlists.$.tracks': 1 }
         return User.findOne({ _id: userId, 'playlists._id': playlistId }, projection)
             .exec()
-            .then(({playlists}) => { console.log('getTracksFromPlaylist', playlists); return playlists[0].tracks })
+            .then(({playlists}) => playlists[0].tracks)
             //.then(({playlists:{tracks}}) => { console.log(tracks); return tracks})
     }
 
