@@ -153,7 +153,7 @@ class UserData {
     }
 
     removePlaylist (userId, playlistId) {
-      const fields = : { _id: 0, 'playlists._id': 1, 'playlists.name': 1, 'playlists.amount': 1, 'playlists.creation_date': 1, 'playlists.description': 1 }
+      const fields = { _id: 0, 'playlists._id': 1, 'playlists.name': 1, 'playlists.amount': 1, 'playlists.creation_date': 1, 'playlists.description': 1 }
         return User.findOneAndUpdate(
             userId,
             { $pull: { playlists: { _id: playlistId } } },
