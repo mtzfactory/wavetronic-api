@@ -16,7 +16,14 @@ function validateOptions (options) {
 
 function normalizePlaylist (data) {
     return data.playlists.map(function(item) {
-        return { id: item._id, name: item.name, description: item.description, amount: itme.amount, creation_date: item.creation_date  }
+        return {
+          id: item._id,
+          name: item.name,
+          description: item.description,
+          amount: itme.amount,
+          creation_date: item.creation_date,
+          last_modified: item.last_modified
+        }
     })
 }
 
@@ -88,9 +95,9 @@ class UserData {
     addFriend (userId, friendId, friend) {
         console.log('data -> addFriend userId', userId, friendId, friend)
         return  User.findOneAndUpdate(
-            userId,
+            { _id: userId },
             { $push: { friends: { _id: friendId, username: friend } } },
-            { safe: true, upsert: false, new: true, fields: { _id:0, 'friends.username': 1, 'friends.confirmed': 1 } })
+            { safe: true, upsert: false, new: true, fields: { 'friends.username': 1, 'friends.confirmed': 1 } })
             .exec() // Para que devuelva un Promise.
             .then(({friends}) => friends)
     }
@@ -100,16 +107,16 @@ class UserData {
         return User.findOneAndUpdate(
             { _id: userId, 'friends.username': friend },
             { 'friends.$.confirmed': true },
-            { new: true, fields: { _id: 0, 'friends.username': 1, 'friends.confirmed': 1 } })
+            { new: true, fields: { 'friends.username': 1, 'friends.confirmed': 1 } })
             .exec() // Para que devuelva un Promise.
             .then(({friends}) => friends)
     }
 
     removeFriend (userId, friend) {
         return User.findOneAndUpdate(
-            userId,
+            { _id: userId },
             { $pull: { friends: { username: friend } } },
-            { new: true, fields: { _id: 0, 'friends.username': 1, 'friends.confirmed': 1 } })
+            { new: true, fields: { 'friends.username': 1, 'friends.confirmed': 1 } })
             .exec() // Para que devuelva un Promise.
             .then(({friends}) => friends)
     }
@@ -134,7 +141,7 @@ class UserData {
     }
 
     addPlaylist (userId, name, description) {
-        const fields = { _id: 0,
+        const fields = {
           'playlists._id': 1,
           'playlists.name': 1,
           'playlists.amount': 1,
@@ -143,7 +150,7 @@ class UserData {
           'playlists.description': 1
         }
         return User.findOneAndUpdate(
-            userId,
+            { _id: userId },
             { $push: { playlists: { name, description } } },
             { safe: true, upsert: true, new: true, fields })
             .exec() // Para que devuelva un Promise.
@@ -160,7 +167,7 @@ class UserData {
     }
 
     removePlaylist (userId, playlistId) {
-        const fields = { _id: 0,
+        const fields = {
           'playlists._id': 1,
           'playlists.name': 1,
           'playlists.amount': 1,
@@ -170,7 +177,7 @@ class UserData {
         }
 
         return User.findOneAndUpdate(
-            userId,
+            { _id: userId },
             { $pull: { playlists: { _id: playlistId } } },
             { new: true, fields })
             .exec() // Para que devuelva un Promise.
@@ -191,7 +198,7 @@ class UserData {
               $inc: { 'playlists.$.amount': 1 },
               $currentDate: { 'playlists.$.last_modified': true }
             },
-            { safe: true, new: true, fields: { _id: 0, playlists: { $elemMatch: { _id: playlistId } } } })
+            { safe: true, new: true, fields: { 'playlists.tracks': 1 } })
             .exec() // Para que devuelva un Promise.
             .then(({playlists}) => playlists[0])
     }
@@ -203,7 +210,7 @@ class UserData {
               $inc: { 'playlists.$.amount' : -1 },
               $currentDate: { 'playlists.$.last_modified': true }
             },
-            { safe:true, new: true, fields: { _id: 0, playlists: { $elemMatch: { _id: playlistId } } } })
+            { safe:true, new: true, fields: { 'playlists.tracks': 1 } })
             .exec() // Para que devuelva un Promise.
             .then(({playlists}) => playlists[0])
     }
