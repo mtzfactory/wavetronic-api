@@ -122,7 +122,7 @@ class UserData {
 
 // /user/playlists
     getPlaylists (userId, options) {
-        options.show = 'playlists.name,playlists._id,playlists.amount,playlists.creation_date,playlists.description'
+        options.show = 'playlists.name,playlists._id,playlists.amount,playlists.creation_date,playlists.description,playlists.last_modified'
         return this._query(() => {
                 if (!userId) throw new Error(`userId cannot be ${user}`)
             }, { _id: userId }, options, true)
@@ -134,7 +134,14 @@ class UserData {
     }
 
     addPlaylist (userId, name, description) {
-        const fields = { _id: 0, 'playlists._id': 1, 'playlists.name': 1, 'playlists.amount': 1, 'playlists.creation_date': 1, 'playlists.description': 1 }
+        const fields = { _id: 0,
+          'playlists._id': 1,
+          'playlists.name': 1,
+          'playlists.amount': 1,
+          'playlists.creation_date': 1,
+          'playlists.last_modified': 1,
+          'playlists.description': 1
+        }
         return User.findOneAndUpdate(
             userId,
             { $push: { playlists: { name, description } } },
@@ -153,7 +160,15 @@ class UserData {
     }
 
     removePlaylist (userId, playlistId) {
-      const fields = { _id: 0, 'playlists._id': 1, 'playlists.name': 1, 'playlists.amount': 1, 'playlists.creation_date': 1, 'playlists.description': 1 }
+        const fields = { _id: 0,
+          'playlists._id': 1,
+          'playlists.name': 1,
+          'playlists.amount': 1,
+          'playlists.creation_date': 1,
+          'playlists.last_modified': 1,
+          'playlists.description': 1
+        }
+
         return User.findOneAndUpdate(
             userId,
             { $pull: { playlists: { _id: playlistId } } },
@@ -172,8 +187,11 @@ class UserData {
     addTrackToPlaylist (userId, playlistId, track) {
         return User.findOneAndUpdate(
             { _id: userId, 'playlists._id': playlistId },
-            { $push: { 'playlists.$.tracks': track }, $inc: { 'playlists.$.amount' : 1 } },
-            { safe: true, upsert: true, new: true, fields: { _id: 0, playlists: { $elemMatch: { _id: playlistId } } } })
+            { $push: { 'playlists.$.tracks': track },
+              $inc: { 'playlists.$.amount': 1 },
+              $currentDate: { 'playlists.$.last_modified': true }
+            },
+            { safe: true, new: true, fields: { _id: 0, playlists: { $elemMatch: { _id: playlistId } } } })
             .exec() // Para que devuelva un Promise.
             .then(({playlists}) => playlists[0])
     }
@@ -181,8 +199,11 @@ class UserData {
     removeTrackFromPlaylist(userId, playlistId, track) {
         return User.findOneAndUpdate(
             { _id: userId, 'playlists._id': playlistId },
-            { $pull: { 'playlists.$.tracks': track }, $inc: { 'playlists.$.amount' : -1 } },
-            { new: true, fields: { _id: 0, playlists: { $elemMatch: { _id: playlistId } } } })
+            { $pull: { 'playlists.$.tracks': track },
+              $inc: { 'playlists.$.amount' : -1 },
+              $currentDate: { 'playlists.$.last_modified': true }
+            },
+            { safe:true, new: true, fields: { _id: 0, playlists: { $elemMatch: { _id: playlistId } } } })
             .exec() // Para que devuelva un Promise.
             .then(({playlists}) => playlists[0])
     }

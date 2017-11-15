@@ -6,7 +6,7 @@ const User = new mongoose.Schema({
     verified: { type: Boolean, default: false },
     registered: { type: Date, default: Date.now },
     last_login: Date,
-    friends: [ 
+    friends: [
         {
             id: mongoose.Schema.Types.ObjectId,
             username: String,
@@ -20,10 +20,11 @@ const User = new mongoose.Schema({
             name: String,
             description: String,
             creation_date: { type: Date, default: Date.now },
+            last_modified: { type: Date, default: Date.now },
             tracks: [ Number ],
             amount: { type: Number, default: 0 }
         }
-    ]    
+    ]
 })
 
 User.plugin(require('mongoose-paginate'))
