@@ -25,7 +25,7 @@ auth.post('/register', (req, res) => {
     if (!email) {
         return res.status(400).json({
             status: 'error',
-            message: 'Email not informed'
+            message: 'Email not informed.'
         })
     }
 

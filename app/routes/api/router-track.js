@@ -43,9 +43,9 @@ track.route('/')
                 data.headers.response_time = new Date().getTime() - reqStart
                 data.headers.offset = offset
                 data.headers.limit = limit
-                res.status(200).json(data) 
+                res.status(200).json(data)
             })
-            .catch( error => res.status(404).json(error.message) )
+            .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
 
 track.route('/tags/:fuzzytags')
@@ -66,9 +66,9 @@ track.route('/tags/:fuzzytags')
                 data.headers.response_time = new Date().getTime() - reqStart
                 data.headers.offset = offset
                 data.headers.limit = limit
-                res.status(200).json(data) 
+                res.status(200).json(data)
             })
-            .catch( error => res.status(404).json(error.message) )
+            .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
 
 module.exports = track

@@ -13,7 +13,7 @@ class MusicBusiness {
     getTracks(options) {
         return new Promise((resolve, reject) => {
             if (options) Object.assign(options, this.parameters)
-            
+
             jamendo.tracks(options, function (error, body) {
                 if (error)
                     return reject(error)
@@ -26,14 +26,29 @@ class MusicBusiness {
     getAlbums (options) {
         return new Promise((resolve, reject) => {
             if (options) Object.assign(options, this.parameters)
-    
+
             jamendo.albums(options, function(error, body) {
                 if (error)
                     return reject(error)
-            
+
                 resolve(body)
             })
         })
+    }
+
+    getTracksByAlbum (options) {
+      return new Promise((resolve, reject) => {
+          if (options) Object.assign(options, this.parameters)
+
+          console.log(options)
+
+          jamendo.album_tracks(options, function(error, body) {
+              if (error)
+                  return reject(error.message)
+
+              resolve(body)
+          })
+      })
     }
 
     getPlaylists (options) {
@@ -43,7 +58,7 @@ class MusicBusiness {
             jamendo.playlists(options, function(error, body) {
                 if (error)
                     return reject(error)
-            
+
                 resolve(body)
             })
         })
@@ -52,11 +67,11 @@ class MusicBusiness {
     getPlaylistTracks (options) {
         return new Promise((resolve, reject) => {
             if (options) Object.assign(options, this.parameters)
-        
+
             jamendo.playlists_tracks(options, function(error, body) {
                 if (error)
                     return reject(error)
-            
+
                 resolve(body)
             })
         })

@@ -7,12 +7,13 @@ const album = express.Router()
 const removeThisProperties = [ 'zip', 'shorturl', 'shareurl' ]
 
 const cleanJson = jsonTransform(function(json) {
-    json.results.forEach(function(child) {
-        removeThisProperties.forEach(function(item) {
-            delete child[item]
-        })
-    })
-    
+    if (json && json.results)
+      json.results.forEach(function(child) {
+          removeThisProperties.forEach(function(item) {
+              delete child[item]
+          })
+      })
+
     return json
 })
 
@@ -30,7 +31,7 @@ album.route('/')
     .get(cleanJson, function(req, res) {
         const { offset, limit } = req
         const reqStart = new Date().getTime()
-        
+
         const options = {
             offset,
             limit,
@@ -42,26 +43,28 @@ album.route('/')
                 data.headers.response_time = new Date().getTime() - reqStart
                 data.headers.offset = offset
                 data.headers.limit = limit
-                res.status(200).json(data) 
+                res.status(200).json(data)
             })
-            .catch( error => res.status(404).json(error.message) )
+            .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
 
-album.route('/id/:album_id')
+album.route('/:albumId')
     .get(cleanJson, function(req, res) {
         const reqStart = new Date().getTime()
+        const { albumId } = req.params
+
+        console.log(albumId)
 
         const options = {
-            order: 'popularity_month',
-            id: req.params.album_id.split(',')
+            id: albumId
         }
 
-        musicBusiness.getAlbums(options)
+        musicBusiness.getTracksByAlbum(options)
             .then( data => {
                 data.headers.response_time = new Date().getTime() - reqStart
-                res.status(200).json(data) 
+                res.status(200).json(data)
             })
-            .catch( error => res.status(404).json(error.message) )
+            .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
 
 module.exports = album
