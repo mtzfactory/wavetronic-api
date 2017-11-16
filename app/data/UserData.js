@@ -129,7 +129,7 @@ class UserData {
 
 // /user/playlists/all
     getAllMyPlaylists (userId, options) {
-        options.show = 'playlists.name,playlists._id'
+        options.show = 'playlists.name,playlists._id,playlists.description,playlists.amount'
         return this._query(() => {
                 if (!userId) throw new Error(`userId cannot be ${user}`)
             }, { _id: userId }, options, true)
