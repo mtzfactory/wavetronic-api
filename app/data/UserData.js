@@ -127,13 +127,22 @@ class UserData {
             .catch( () => { throw new Error('not implemented yet') })
     }
 
+// /user/playlists/all
+    getAllMyPlaylists (userId, options) {
+        options.show = 'playlists.name,playlists._id'
+        return this._query(() => {
+                if (!userId) throw new Error(`userId cannot be ${user}`)
+            }, { _id: userId }, options, true)
+            .then(({playlists}) => playlists)
+    }
+
 // /user/playlists
     getPlaylists (userId, options) {
         options.show = 'playlists.name,playlists._id,playlists.amount,playlists.creation_date,playlists.description,playlists.last_modified'
         return this._query(() => {
                 if (!userId) throw new Error(`userId cannot be ${user}`)
-            }, { _id: userId }, options, true)
-            .then(({playlists}) => playlists)
+            }, { _id: userId }, options, false)
+            //.then(({docs:{playlists}}) => playlists)
     }
 
     retrievePlaylistIdByName (userId, name) {

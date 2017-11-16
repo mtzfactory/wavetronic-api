@@ -28,7 +28,7 @@ user.route('/')
                     status: 'success',
                     headers: { response_time: new Date().getTime() - reqStart },
                     results
-                }) 
+                })
             })
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
@@ -39,14 +39,14 @@ user.route('/friends')
         const { id: userId, username } = req.user // Passport
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const options = { page, limit, show, hide }
-        
+
         User.getFriends(userId, options)
             .then( results => {
                 res.status(200).json({
                     status: 'success',
                     headers: { page, limit, response_time: new Date().getTime() - reqStart },
                     results
-                }) 
+                })
             })
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
@@ -62,7 +62,7 @@ user.route('/friends')
                     status: 'success',
                     headers: { response_time: new Date().getTime() - reqStart },
                     results
-                }) 
+                })
             })
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
@@ -73,14 +73,14 @@ user.route('/friends/:friendId')
         const { id: userId, username } = req.user // Passport
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const { friendId } = req.params
-        
+
         User.updateFriendship(userId, friendId)
             .then( results => {
                 res.status(200).json({
                     status: 'success',
                     headers: { response_time: new Date().getTime() - reqStart },
                     results
-                }) 
+                })
             })
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
@@ -96,7 +96,7 @@ user.route('/friends/:friendId')
                     status: 'success',
                     headers: { response_time: new Date().getTime() - reqStart },
                     results
-                }) 
+                })
             })
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
@@ -114,7 +114,25 @@ user.route('/friends/:friendId/track/:trackId')
                     status: 'success',
                     headers: { response_time: new Date().getTime() - reqStart },
                     results
-                }) 
+                })
+            })
+            .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
+    })
+
+user.route('/playlists/all')
+    .get(function(req, res) {
+        const reqStart = new Date().getTime()
+        const { id: userId, username } = req.user // Passport
+        const { page, limit, show, hide } = req // middleware del router api (index.js)
+        const options = { page, limit, show, hide }
+
+        User.getAllMyPlaylists(userId, options)
+            .then( results => {
+                res.status(200).json({
+                    status: 'success',
+                    headers: { response_time: new Date().getTime() - reqStart },
+                    results
+                })
             })
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
@@ -125,14 +143,20 @@ user.route('/playlists')
         const { id: userId, username } = req.user // Passport
         const { page, limit, show, hide } = req // middleware del router api (index.js)
         const options = { page, limit, show, hide }
-        
+
         User.getPlaylists(userId, options)
-            .then( results => {
+            .then( records => {
                 res.status(200).json({
                     status: 'success',
-                    headers: { page, limit, response_time: new Date().getTime() - reqStart },
-                    results
-                }) 
+                    headers: {
+                        total: records.total,
+                        limit: records.limit,
+                        page: records.page,
+                        pages: records.pages,
+                        response_time: new Date().getTime() - reqStart
+                    },
+                    results: records.docs[0].playlists
+                })
             })
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
@@ -148,7 +172,7 @@ user.route('/playlists')
                     status: 'success',
                     headers: { response_time: new Date().getTime() - reqStart },
                     results
-                }) 
+                })
             })
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
@@ -167,7 +191,7 @@ user.route('/playlists/:playlistId')
                     status: 'success',
                     headers: { response_time: new Date().getTime() - reqStart },
                     results
-                }) 
+                })
             })
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
@@ -183,7 +207,7 @@ user.route('/playlists/:playlistId')
                     status: 'success',
                     headers: { response_time: new Date().getTime() - reqStart },
                     results
-                }) 
+                })
             })
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
@@ -201,7 +225,7 @@ user.route('/playlists/:playlistId/track/:trackId')
                     status: 'success',
                     headers: { response_time: new Date().getTime() - reqStart },
                     results
-                }) 
+                })
             })
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
@@ -217,7 +241,7 @@ user.route('/playlists/:playlistId/track/:trackId')
                     status: 'success',
                     headers: { response_time: new Date().getTime() - reqStart },
                     results
-                }) 
+                })
             })
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })

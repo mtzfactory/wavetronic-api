@@ -63,7 +63,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMDczMWUzZDkwOTZmMzI0NWU5M2M5OSIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDQyNDkwNn0.FRujPlleJJ-dTT9s6pe8G9OX1DFvFwlDuYXx9GB_56w"
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
 							}
 						],
 						"body": {},
@@ -95,6 +95,35 @@
 						"description": ""
 					},
 					"response": []
+				},
+				{
+					"name": "/api/v1/albums/:id (Get album's tracks)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/albums/169949",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"albums",
+								"169949"
+							]
+						},
+						"description": ""
+					},
+					"response": []
 				}
 			]
 		},
@@ -109,7 +138,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMDczMWUzZDkwOTZmMzI0NWU5M2M5OSIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDQyNDkwNn0.FRujPlleJJ-dTT9s6pe8G9OX1DFvFwlDuYXx9GB_56w"
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
 							}
 						],
 						"body": {},
@@ -373,7 +402,7 @@
 						],
 						"body": {},
 						"url": {
-							"raw": "http://localhost:3001/api/v1/user/playlists/5a0b0a4dac962c21ce132ba3/track/222",
+							"raw": "http://localhost:3001/api/v1/user/playlists/5a0b05b9bb65ab20f0a77a37/track/4545",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -384,9 +413,9 @@
 								"v1",
 								"user",
 								"playlists",
-								"5a0b0a4dac962c21ce132ba3",
+								"5a0b05b9bb65ab20f0a77a37",
 								"track",
-								"222"
+								"4545"
 							]
 						},
 						"description": ""
@@ -405,7 +434,7 @@
 						],
 						"body": {},
 						"url": {
-							"raw": "http://localhost:3001/api/v1/user/playlists/5a0b02417993f820449c4036/track/1123",
+							"raw": "http://localhost:3001/api/v1/user/playlists/5a0b05b9bb65ab20f0a77a37/track/222",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -416,9 +445,9 @@
 								"v1",
 								"user",
 								"playlists",
-								"5a0b02417993f820449c4036",
+								"5a0b05b9bb65ab20f0a77a37",
 								"track",
-								"1123"
+								"222"
 							]
 						},
 						"description": ""
@@ -476,7 +505,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"playlist-1\"\n}"
+							"raw": "{\n\t\"name\": \"playlist-2\",\n\t\"description\": \"workout\"\n}"
 						},
 						"url": {
 							"raw": "http://localhost:3001/api/v1/user/playlists",
@@ -514,7 +543,7 @@
 						],
 						"body": {},
 						"url": {
-							"raw": "http://localhost:3001/api/v1/user/playlists/5a0b0a4dac962c21ce132ba3",
+							"raw": "http://localhost:3001/api/v1/user/playlists/5a0b05b9bb65ab20f0a77a37",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -525,7 +554,7 @@
 								"v1",
 								"user",
 								"playlists",
-								"5a0b0a4dac962c21ce132ba3"
+								"5a0b05b9bb65ab20f0a77a37"
 							]
 						},
 						"description": ""
