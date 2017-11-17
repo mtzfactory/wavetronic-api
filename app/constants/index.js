@@ -1,6 +1,8 @@
 const { DEBUG } = process.env
 
-const { API_PORT, API_SECRET } = process.env
+const { PORT, API_PORT, API_SECRET } = process.env
+if (!API_PORT)
+    API_PORT = PORT
 
 const { MONGO_HOST, MONGO_DB, MONGO_PORT, MONGO_USER, MONGO_PASS } = process.env
 
