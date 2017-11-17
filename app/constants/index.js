@@ -1,6 +1,8 @@
 const { DEBUG } = process.env
 
-const { PORT, API_PORT, API_SECRET } = process.env
+const { API_PORT, API_SECRET } = process.env
+let { PORT } = process.env
+
 if (!PORT)
     PORT = API_PORT
 
