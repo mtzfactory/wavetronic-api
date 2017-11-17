@@ -6,7 +6,7 @@ const debug = require('debug')('app')
 require('dotenv').config()
 const { 
     DEBUG,
-    API_PORT,
+    PORT,
     API_SECRET,
     MONGO_HOST,
     MONGO_DB,
@@ -22,7 +22,7 @@ if (DEBUG)
 {
     debug('> Started:\t\t', new Date().toLocaleString())
     debug('DEBUG\t\t\t', DEBUG)
-    debug('API_PORT\t\t\t', API_PORT)
+    debug('PORT\t\t\t', PORT)
     debug('JAMENDO_CLIENT_ID\t\t', JAMENDO_CLIENT_ID)
     debug('JAMENDO_CLIENT_SECRET\t', JAMENDO_CLIENT_SECRET)
     debug('MONGO_USER\t\t', MONGO_USER)
@@ -32,7 +32,7 @@ if (DEBUG)
     debug('MONGO_DB\t\t\t', MONGO_DB)
 }
 
-if (!API_PORT || !API_SECRET)
+if (!PORT || !API_SECRET)
     return debug('> Set the API environment variables first.')
 
 if (!MONGO_HOST || !MONGO_PORT || !MONGO_DB || !MONGO_USER || ! MONGO_PASS)
@@ -75,8 +75,8 @@ app.use('/jamendo', require('./routes/jamendo'))
 app.locals.token = ''
 
 // SERVER UP -----------------------------------------
-app.listen(API_PORT, () => {
-    debug(`> Magic happens on port ${API_PORT}`) // eslint-disable-line
+app.listen(PORT, () => {
+    debug(`> Magic happens on port ${PORT}`) // eslint-disable-line
 })
 
 process.on('SIGINT', function() {
