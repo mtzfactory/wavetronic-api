@@ -16,6 +16,11 @@ class User {
         return userData.getUserProfile(userId)
     }
 
+    updatePushNotificationToken(userId, pnToken) {
+        debug('updatePushNotificationToken', userId)
+        return userData.updatePushNotificationToken(userId, pnToken)
+    }
+
 // /user/friends
     getFriends (userId, options) {
         debug('getFriends', userId)
@@ -77,9 +82,8 @@ class User {
     }
 
 // /user/friends/:friendId/track/:trackId
-    sendTrackToFriend (userId, friend, track) {
-        return Promise.resolve()
-            .then( () => { throw new Error('not implemented yet') })
+    sendTrackToFriend (userId, friendId, trackId) {
+        return userData.sendTrackToFriend(userId, friendId, trackId)
     }
 
 // /user/playlists/all

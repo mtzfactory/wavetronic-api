@@ -6,6 +6,7 @@ const User = new mongoose.Schema({
     verified: { type: Boolean, default: false },
     registered: { type: Date, default: Date.now },
     last_login: Date,
+    push_notification_token: String,
     friends: [
         {
             id: mongoose.Schema.Types.ObjectId,

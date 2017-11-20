@@ -78,6 +78,14 @@ class UserData {
             }, { _id: userId }, { hide: '_id,playlists._id,friends._id' }, true)
     }
 
+    updatePushNotificationToken(userId, pnToken) {
+        return User.findOneAndUpdate(
+            { _id: userId },
+            { 'push_notification_token': pnToken },
+            { new: true, fields: { '_id': 0, 'username': 1, 'push_notification_token': 1 } })
+            .exec() // Para que devuelva un Promise.
+    }
+
 // /user/friends
     getFriends (userId, options) {
         options.show = 'friends.username,friends.confirmed'
@@ -123,8 +131,8 @@ class UserData {
 
 // /user/friends/:friendId/track/:trackId
     sendTrackToFriend (userId, friend, track) {
-        return Promise.reject()
-            .catch( () => { throw new Error('not implemented yet') })
+        return Promise.resolve()
+            .then( () => { throw new Error('not implemented yet') })
     }
 
 // /user/playlists/all

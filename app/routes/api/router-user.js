@@ -32,6 +32,21 @@ user.route('/')
             })
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
+    .put(function(req, res) {
+        const reqStart = new Date().getTime()
+        const { id: userId, username } = req.user // Passport
+        const { pnToken } = req.body
+
+        User.updatePushNotificationToken(userId, pnToken)
+          .then( results => {
+              res.status(200).json({
+                  status: 'success',
+                  headers: { response_time: new Date().getTime() - reqStart },
+                  results
+              })
+          })
+          .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
+    })
 
 user.route('/friends')
     .get(function(req, res) {
@@ -106,9 +121,9 @@ user.route('/friends/:friendId/track/:trackId')
         const reqStart = new Date().getTime()
         const { id: userId, username } = req.user // Passport
         const { page, limit, show, hide } = req // middleware del router api (index.js)
-        const { friendId, track } = req.params
+        const { friendId, trackId } = req.params
 
-        User.sendTrackToFriend(userId, friendId, track)
+        User.sendTrackToFriend(userId, friendId, trackId)
             .then( results => {
                 res.status(200).json({
                     status: 'success',
