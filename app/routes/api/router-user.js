@@ -60,13 +60,13 @@ user.route('/friends')
                 res.status(200).json({
                     status: 'success',
                     headers: {
-                        offset: results.offset,
-                        limit: results.limit,
-                        results_count: results.docs[0] ? results.docs[0].friends.length : 0,
-                        results_fullcount: results.docs[0].friends.length < limit ? results.docs[0].friends.length : results.offsets * limit,
+                        offset,
+                        limit,
+                        results_count: results.results_count,
+                        results_fullcount: results.results_fullcount,
                         response_time: new Date().getTime() - reqStart
-                      },
-                    results: results.docs[0].friends
+                    },
+                    results: results.friends
                 })
             })
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
@@ -167,16 +167,17 @@ user.route('/playlists')
 
         User.getPlaylists(userId, options)
             .then( results => {
+                
                 res.status(200).json({
                     status: 'success',
                     headers: {
-                        offset: results.offset,
-                        limit: results.limit,
-                        results_count: results.docs[0] && results.docs[0].playlists ? results.docs[0].playlists.length : 0,
-                        results_fullcount: results.docs[0] && results.docs[0].playlists.length < limit ? results.docs[0].playlists.length : results.offset * results.limit,
+                        offset,
+                        limit,
+                        results_count: results.results_count,
+                        results_fullcount: results.results_fullcount,
                         response_time: new Date().getTime() - reqStart
                     },
-                    results: results //results.docs[0].playlists
+                    results: results.playlists
                 })
             })
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )

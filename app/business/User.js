@@ -25,6 +25,14 @@ class User {
     getFriends (userId, options) {
         debug('getFriends', userId)
         return userData.getFriends(userId, options)
+            .then( docs => {
+                return userData.getAllMyFriends(userId, {})
+                    .then( total => {
+                        docs.results_count = docs.friends.length
+                        docs.results_fullcount = total.length
+                        return docs
+                    })
+            })
     }
 
     areWeFriends (userId, friend) {
@@ -50,6 +58,7 @@ class User {
             .then( res => {
                 if (res.friendship === false && res.friendId) {
                     return userData.addFriend(userId, res.friendId, friend)
+                        //.then(friends => { return friends.filter(f => f.username === friend) })
                 }
 
                 throw new Error(
@@ -64,8 +73,9 @@ class User {
     updateFriendship (userId, friend) {
         debug('updateFriendship', userId, friend)
         return userData.updateFriendship(userId, friend)
-            .then(docs => {
-                if (docs) return docs
+            .then(friends => {
+                //if (friends) { return friends.filter(f => f.username === friend) }
+                if (friends) return friends
 
                 throw new Error(`'${friend}' is not your friend.`)
             })
@@ -74,11 +84,9 @@ class User {
     removeFriend (userId, friend) {
         debug('removeFriend', userId, friend)
         return userData.removeFriend(userId, friend)
-            .then(docs => {
-                if (docs) return docs
-
-                throw new Error(`'${friend}' is not your friend.`)
-            })
+            // .then(friends => {
+            //     if (friends) { return friends.length }
+            // })
     }
 
 // /user/friends/:friendId/track/:trackId
@@ -96,6 +104,14 @@ class User {
     getPlaylists (userId, options) {
         debug('getPlaylists', userId)
         return userData.getPlaylists(userId, options)
+            .then( docs => {
+                return userData.getAllMyPlaylists(userId, {})
+                    .then( total => {
+                        docs.results_count = docs.playlists.length
+                        docs.results_fullcount = total.length
+                        return docs
+                    })
+            })
     }
 
     existsThePlaylist (userId, playlist) {
@@ -109,38 +125,55 @@ class User {
             .then(docs => {
                 if (!docs)
                     return userData.addPlaylist(userId, playlist, description)
+                        //.then(playlists => { return playlists.filter(p => p.name === playlist) })
 
                 throw new Error(`${playlist} already exist.`)
             })
     }
 
 // /user/playlists/:playlistId
-    getTracksFromPlaylist(userId, playlistId) {
+    getTracksFromPlaylist (userId, playlistId) {
         debug('getTracksFromPlaylist', userId, playlistId)
         return userData.getTracksFromPlaylist(userId, playlistId)
     }
 
-    removePlaylist(userId, playlistId) {
+    removePlaylist (userId, playlistId) {
         debug('removePlaylist', userId, playlistId)
         return userData.removePlaylist(userId, playlistId)
+            // .then(playlists => {
+            //     if (playlists) { return playlists.length }
+            // })
     }
 
 // /user/playlists/:playlistId/track/:trackId
-    addTrackToPlaylist(userId, playlistId, track) {
+    isTrackAlredyInThePlaylist (userId, playlistId, track) {
+        return userData.getTracksFromPlaylist (userId, playlistId)
+            .then(tracks => {
+                return tracks
+                    ? tracks.filter( t => t == track)
+                    : null
+            })
+    }
+
+    addTrackToPlaylist (userId, playlistId, track) {
         debug('addTrackToPlaylist', userId, playlistId, track)
-        return userData.isTrackAlredyInThePlaylist(userId, playlistId, track)
-            .then(docs => {
-                if (!docs) {
+        return this.isTrackAlredyInThePlaylist(userId, playlistId, track)
+            .then(tracks => {
+                if (!tracks || tracks.length === 0) {
                     return userData.addTrackToPlaylist(userId, playlistId, track)
+                        //.then(tracks => { return tracks.filter(t => t == track) })
                 }
 
-                throw new Error(`'${track}' alredy in '${docs.name}'.`)
+                throw new Error(`'${track}' alredy in '${playlistId}'.`)
             })
     }
 
     removeTrackFromPlaylist(userId, playlistId, track) {
         debug('removeTrackFromPlaylist', userId, playlistId)
         return userData.removeTrackFromPlaylist(userId, playlistId, track)
+            // .then(tracks => {
+            //     if (tracks) { return tracks.length }
+            // })
     }
 
 // /user/location

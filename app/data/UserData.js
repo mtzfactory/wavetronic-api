@@ -43,14 +43,25 @@ class UserData {
 
                 if (!single) validateOptions(options)
 
-                options.select = ''
-                if (options.hide) // el orden es importante, hide primero...
-                    options.select += options.hide.split(',').map(field => `-${field}`).join(' ')
+                let projection = {} // ex: { restaurant_id: 1, _id: 0 }
+
+                if (options.hide)
+                    options.hide.split(',').forEach(field => projection[field] = 0)
                 if (options.show)
-                    options.select += ' ' + options.show.split(',').join(' ')
+                    options.show.split(',').forEach(field => projection[field] = 1)
+
+                options.select = projection //''
+                // if (options.hide) // el orden es importante, hide primero...
+                //     options.select += options.hide.split(',').map(field => `-${field}`).join(' ')
+                // if (options.show)
+                //     options.select += ' ' + options.show.split(',').join(' ')
+
+                if (options.slice) {
+                    projection = Object.assign(projection, options.slice)
+                }
 
                 return single
-                    ? User.findOne(conditions, options.select)
+                    ? User.findOne(conditions, projection)
                     : User.paginate(conditions, options)
             })
     }
@@ -87,12 +98,20 @@ class UserData {
     }
 
 // /user/friends
-    getFriends (userId, options) {
+    getAllMyFriends (userId, options) {
         options.show = 'friends._id,friends.username,friends.confirmed'
         return this._query(() => {
                 if (!userId) throw new Error(`userId cannot be ${userId}`)
-            }, { _id: userId }, options, false)
-            //.then(({friends}) => friends)
+            }, { _id: userId }, options, true)
+            .then(({friends}) => friends)
+    }
+
+    getFriends (userId, options) {
+        options.show = 'friends._id,friends.username,friends.confirmed'
+        options.slice = { friends: { $slice: [options.offset, options.limit] } }
+        return this._query(() => {
+                if (!userId) throw new Error(`userId cannot be ${userId}`)
+            }, { _id: userId }, options, true)
     }
 
     retrieveFriendById (userId, friendId) {
@@ -146,12 +165,11 @@ class UserData {
 
 // /user/playlists
     getPlaylists (userId, options) {
-        //options.show = 'playlists.name,playlists._id,playlists.amount,playlists.creation_date,playlists.description,playlists.last_modified'
-        options.show = 'playlists'
+        options.show = 'playlists.name,playlists._id,playlists.amount,playlists.creation_date,playlists.description,playlists.last_modified'
+        options.slice = { playlists: { $slice: [options.offset, options.limit] } }
         return this._query(() => {
                 if (!userId) throw new Error(`userId cannot be ${userId}`)
-            }, { _id: userId }, options, false)
-            //.then(({docs:{playlists}}) => playlists)
+            }, { _id: userId }, options, true)
     }
 
     retrievePlaylistIdByName (userId, name) {
@@ -203,12 +221,6 @@ class UserData {
     }
 
 // /user/playlists/:playlistId/track/:trackId
-    isTrackAlredyInThePlaylist (userId, playlistId, track) {
-        const projection = { _id: 0, 'playlists.$.tracks': 1 }
-        return User.findOne({ _id: userId, 'playlists._id': playlistId, 'playlists.$.tracks': {$in: [track] } }, projection)
-            .then(docs => { return docs ? docs.playlists[0] : null })
-    }
-
     addTrackToPlaylist (userId, playlistId, track) {
         return User.findOneAndUpdate(
             { _id: userId, 'playlists._id': playlistId },
@@ -216,9 +228,9 @@ class UserData {
               $inc: { 'playlists.$.amount': 1 },
               $currentDate: { 'playlists.$.last_modified': true }
             },
-            { safe: true, new: true, fields: { 'playlists.tracks': 1 } })
+            { safe: true, new: true, fields: { 'playlists': {$elemMatch: { _id: playlistId } } } })
             .exec() // Para que devuelva un Promise.
-            .then(({playlists}) => playlists[0])
+            .then(({playlists}) => playlists[0].tracks)
     }
 
     removeTrackFromPlaylist(userId, playlistId, track) {
@@ -228,9 +240,9 @@ class UserData {
               $inc: { 'playlists.$.amount' : -1 },
               $currentDate: { 'playlists.$.last_modified': true }
             },
-            { safe:true, new: true, fields: { 'playlists.tracks': 1 } })
+            { safe:true, new: true, fields: { 'playlists': {$elemMatch: { _id: playlistId } } } })
             .exec() // Para que devuelva un Promise.
-            .then(({playlists}) => playlists[0])
+            .then(({playlists}) => playlists[0].tracks)
     }
 
 // /user/location
