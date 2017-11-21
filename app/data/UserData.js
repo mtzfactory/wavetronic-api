@@ -88,7 +88,7 @@ class UserData {
 
 // /user/friends
     getFriends (userId, options) {
-        options.show = 'friends.username,friends.confirmed'
+        options.show = 'friends._id,friends.username,friends.confirmed'
         return this._query(() => {
                 if (!userId) throw new Error(`userId cannot be ${user}`)
             }, { _id: userId }, options, true)
