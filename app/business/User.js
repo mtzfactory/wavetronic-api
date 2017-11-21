@@ -94,12 +94,6 @@ class User {
         return userData.sendTrackToFriend(userId, friendId, trackId)
     }
 
-// /user/playlists/all
-    // getAllMyPlaylists (userId, options) {
-    //     debug('getAllMyPlaylists', userId)
-    //     return userData.getAllMyPlaylists(userId, options)
-    // }
-
 // /user/playlists
     getPlaylists (userId, options) {
         debug('getPlaylists', userId)

@@ -149,12 +149,12 @@ class UserData {
     }
 
 // /user/friends/:friendId/track/:trackId
-    sendTrackToFriend (userId, friend, track) {
+    sendTrackToFriend (userId, friendId, trackId) {
         return Promise.resolve()
-            .then( () => { throw new Error('not implemented yet') })
+            .then( () => { throw new Error(`not implemented yet. Send track ${trackId} to ${friendId}`) })
     }
 
-// /user/playlists/all
+// /user/playlists
     getAllMyPlaylists (userId, options) {
         options.show = 'playlists.name,playlists._id,playlists.description,playlists.amount'
         return this._query(() => {
@@ -163,7 +163,6 @@ class UserData {
             .then(({playlists}) => playlists)
     }
 
-// /user/playlists
     getPlaylists (userId, options) {
         options.show = 'playlists.name,playlists._id,playlists.amount,playlists.creation_date,playlists.description,playlists.last_modified'
         options.slice = { playlists: { $slice: [options.offset, options.limit] } }
