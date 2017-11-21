@@ -91,8 +91,8 @@ class UserData {
         options.show = 'friends._id,friends.username,friends.confirmed'
         return this._query(() => {
                 if (!userId) throw new Error(`userId cannot be ${user}`)
-            }, { _id: userId }, options, true)
-            .then(({friends}) => friends)
+            }, { _id: userId }, options, false)
+            //.then(({friends}) => friends)
     }
 
     retrieveFriendById (userId, friendId) {
@@ -234,7 +234,8 @@ class UserData {
 
 // /user/location
     updateLastCoordinates(userId, coordinates) {
-        return false
+        return Promise.resolve()
+            .then( () => { throw new Error('not implemented yet') })
     }
 }
 // exportamos uns singleton...

@@ -59,8 +59,14 @@ user.route('/friends')
             .then( results => {
                 res.status(200).json({
                     status: 'success',
-                    headers: { page, limit, response_time: new Date().getTime() - reqStart },
-                    results
+                    headers: {
+                        page,
+                        limit,
+                        results_count: results.docs[0] ? results.docs[0].friends.length : 0,
+                        results_fullcount: results.docs[0].friends.length < limit ? results.docs[0].friends.length : results.pages * limit,
+                        response_time: new Date().getTime() - reqStart
+                      },
+                    results: results.docs[0].friends
                 })
             })
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
