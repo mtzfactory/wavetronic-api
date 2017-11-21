@@ -1,10 +1,10 @@
 const User = require('./models/UserModel')
 
 function validateOptions (options) {
-    if (!options.page || typeof options.page !== 'number')
-        throw new Error(`page cannot be ${options.page}`)
+    if (options.offset === undefined || typeof options.offset !== 'number')
+        throw new Error(`offset cannot be ${options.offset}`)
 
-    if (!options.limit || typeof options.limit !== 'number')
+    if (options.limit === undefined || typeof options.limit !== 'number')
         throw new Error(`limit cannot be ${options.limit}`)
 
     if (options.show && typeof options.show !== 'string')
@@ -74,7 +74,7 @@ class UserData {
 // /user
     getUserProfile (userId) {
         return this._query(() => {
-                if (!userId) throw new Error(`userId cannot be ${user}`)
+                if (!userId) throw new Error(`userId cannot be ${userId}`)
             }, { _id: userId }, { hide: '_id,playlists._id,friends._id' }, true)
     }
 
@@ -90,7 +90,7 @@ class UserData {
     getFriends (userId, options) {
         options.show = 'friends._id,friends.username,friends.confirmed'
         return this._query(() => {
-                if (!userId) throw new Error(`userId cannot be ${user}`)
+                if (!userId) throw new Error(`userId cannot be ${userId}`)
             }, { _id: userId }, options, false)
             //.then(({friends}) => friends)
     }
@@ -139,16 +139,17 @@ class UserData {
     getAllMyPlaylists (userId, options) {
         options.show = 'playlists.name,playlists._id,playlists.description,playlists.amount'
         return this._query(() => {
-                if (!userId) throw new Error(`userId cannot be ${user}`)
+                if (!userId) throw new Error(`userId cannot be ${userId}`)
             }, { _id: userId }, options, true)
             .then(({playlists}) => playlists)
     }
 
 // /user/playlists
     getPlaylists (userId, options) {
-        options.show = 'playlists.name,playlists._id,playlists.amount,playlists.creation_date,playlists.description,playlists.last_modified'
+        //options.show = 'playlists.name,playlists._id,playlists.amount,playlists.creation_date,playlists.description,playlists.last_modified'
+        options.show = 'playlists'
         return this._query(() => {
-                if (!userId) throw new Error(`userId cannot be ${user}`)
+                if (!userId) throw new Error(`userId cannot be ${userId}`)
             }, { _id: userId }, options, false)
             //.then(({docs:{playlists}}) => playlists)
     }
