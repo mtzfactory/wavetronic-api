@@ -140,24 +140,6 @@ user.route('/friends/:friendId/track/:trackId')
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
 
-user.route('/playlists/all')
-    .get(function(req, res) {
-        const reqStart = new Date().getTime()
-        const { id: userId, username } = req.user // Passport
-        const { offset, limit, show, hide } = req // middleware del router api (index.js)
-        const options = { offset, limit, show, hide }
-
-        User.getAllMyPlaylists(userId, options)
-            .then( results => {
-                res.status(200).json({
-                    status: 'success',
-                    headers: { response_time: new Date().getTime() - reqStart },
-                    results
-                })
-            })
-            .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
-    })
-
 user.route('/playlists')
     .get(function(req, res) {
         const reqStart = new Date().getTime()
