@@ -7,22 +7,140 @@
 	},
 	"item": [
 		{
-			"name": "/api/v1//playlists",
+			"name": "/auth",
 			"description": "",
 			"item": [
 				{
-					"name": "/api/v1/playlists ( Authorized )",
+					"name": "/auth/register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"bart\",\n\t\"email\": \"bart@example.com\",\n\t\"password\": \"123\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"auth",
+								"register"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/auth/register (Email not informed)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"ricardo\",\n\t\"password\": \"123\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"auth",
+								"register"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/auth/login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"ricardo\",\n\t\"password\": \"123\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/auth/revoke",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3001/auth/revoke",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"auth",
+								"revoke"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/api/v1/tracks",
+			"description": "",
+			"item": [
+				{
+					"name": "/api/v1/tracks ( Get JMN tracks )",
 					"request": {
 						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMDczMWUzZDkwOTZmMzI0NWU5M2M5OSIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDQyNDkwNn0.FRujPlleJJ-dTT9s6pe8G9OX1DFvFwlDuYXx9GB_56w"
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
 							}
 						],
 						"body": {},
 						"url": {
-							"raw": "http://localhost:3001/api/v1/playlists?offset=1&limit=15",
+							"raw": "http://localhost:3001/api/v1/tracks?offset=1&limit=15",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -31,7 +149,7 @@
 							"path": [
 								"api",
 								"v1",
-								"playlists"
+								"tracks"
 							],
 							"query": [
 								{
@@ -49,6 +167,41 @@
 						"description": ""
 					},
 					"response": []
+				},
+				{
+					"name": "/api/v1/tracks ( by track Id )",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/tracks?id=1353511+1111548",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"tracks"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1353511+1111548",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
 				}
 			]
 		},
@@ -57,7 +210,7 @@
 			"description": "",
 			"item": [
 				{
-					"name": "/api/v1/albums ( Authorized )",
+					"name": "/api/v1/albums ( Get JMN albums )",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -128,22 +281,22 @@
 			]
 		},
 		{
-			"name": "/api/v1/tracks",
+			"name": "/api/v1//playlists",
 			"description": "",
 			"item": [
 				{
-					"name": "/api/v1/tracks ( Authorized )",
+					"name": "/api/v1/playlists ( Get JMN playlists )",
 					"request": {
 						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMDczMWUzZDkwOTZmMzI0NWU5M2M5OSIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDQyNDkwNn0.FRujPlleJJ-dTT9s6pe8G9OX1DFvFwlDuYXx9GB_56w"
 							}
 						],
 						"body": {},
 						"url": {
-							"raw": "http://localhost:3001/api/v1/tracks?offset=1&limit=15",
+							"raw": "http://localhost:3001/api/v1/playlists?offset=1&limit=15",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -152,7 +305,7 @@
 							"path": [
 								"api",
 								"v1",
-								"tracks"
+								"playlists"
 							],
 							"query": [
 								{
@@ -430,80 +583,6 @@
 			]
 		},
 		{
-			"name": "/api/v1/user/playlist/:id/track/:id",
-			"description": "",
-			"item": [
-				{
-					"name": "/api/v1/user/playlists/:id/track/:id (Add track)",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {},
-						"url": {
-							"raw": "http://localhost:3001/api/v1/user/playlists/5a1434cb7a7158546aef6542/track/1258976",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3001",
-							"path": [
-								"api",
-								"v1",
-								"user",
-								"playlists",
-								"5a1434cb7a7158546aef6542",
-								"track",
-								"1258976"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "/api/v1/user/playlists/:id/track/:id (Remove track)",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
-							}
-						],
-						"body": {},
-						"url": {
-							"raw": "http://localhost:3001/api/v1/user/playlists/5a1434cb7a7158546aef6542/track/1258976",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3001",
-							"path": [
-								"api",
-								"v1",
-								"user",
-								"playlists",
-								"5a1434cb7a7158546aef6542",
-								"track",
-								"1258976"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "/api/v1/user/playlists",
 			"description": "",
 			"item": [
@@ -657,115 +736,71 @@
 			]
 		},
 		{
-			"name": "/auth",
+			"name": "/api/v1/user/playlist/:id/track/:id",
 			"description": "",
 			"item": [
 				{
-					"name": "/auth/register",
+					"name": "/api/v1/user/playlists/:id/track/:id (Add track)",
 					"request": {
-						"method": "POST",
+						"method": "PUT",
 						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
+							},
 							{
 								"key": "Content-Type",
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"username\": \"bart\",\n\t\"email\": \"bart@example.com\",\n\t\"password\": \"123\"\n}"
-						},
-						"url": {
-							"raw": "http://localhost:3001/auth/register",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3001",
-							"path": [
-								"auth",
-								"register"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "/auth/register (Email not informed)",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"username\": \"ricardo\",\n\t\"password\": \"123\"\n}"
-						},
-						"url": {
-							"raw": "http://localhost:3001/auth/register",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3001",
-							"path": [
-								"auth",
-								"register"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "/auth/login",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"username\": \"ricardo\",\n\t\"password\": \"123\"\n}"
-						},
-						"url": {
-							"raw": "http://localhost:3001/auth/login",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3001",
-							"path": [
-								"auth",
-								"login"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "/auth/revoke",
-					"request": {
-						"method": "GET",
-						"header": [],
 						"body": {},
 						"url": {
-							"raw": "http://localhost:3001/auth/revoke",
+							"raw": "http://localhost:3001/api/v1/user/playlists/5a1434cb7a7158546aef6542/track/1258976",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "3001",
 							"path": [
-								"auth",
-								"revoke"
+								"api",
+								"v1",
+								"user",
+								"playlists",
+								"5a1434cb7a7158546aef6542",
+								"track",
+								"1258976"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/api/v1/user/playlists/:id/track/:id (Remove track)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/user/playlists/5a1434cb7a7158546aef6542/track/1258976",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"playlists",
+								"5a1434cb7a7158546aef6542",
+								"track",
+								"1258976"
 							]
 						},
 						"description": ""
