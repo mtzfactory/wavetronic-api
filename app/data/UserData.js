@@ -114,6 +114,12 @@ class UserData {
             }, { _id: userId }, options, true)
     }
 
+    retrievePnTokenById (userId) {
+        return this._query(() => {
+                if (!userId) throw new Error(`userId cannot be ${userId}`)
+            }, { _id: userId }, { show: 'push_notification_token' }, true)
+    }
+
     retrieveFriendById (userId, friendId) {
         return this._isInTheList(userId, 'friends', { $elemMatch: { _id: friendId } })
             .then(docs => { return docs ? docs.friends[0] : null })
@@ -129,7 +135,7 @@ class UserData {
             .then(({friends}) => friends)
     }
 
-// /user/friends/:friendId
+// /user/friends/:friend
     updateFriendship (userId, friend) {
         return User.findOneAndUpdate(
             { _id: userId, 'friends.username': friend },
@@ -146,12 +152,6 @@ class UserData {
             { new: true, fields: { 'friends.username': 1, 'friends.confirmed': 1 } })
             .exec() // Para que devuelva un Promise.
             .then(({friends}) => friends)
-    }
-
-// /user/friends/:friendId/track/:trackId
-    sendTrackToFriend (userId, friendId, trackId) {
-        return Promise.resolve()
-            .then( () => { throw new Error(`not implemented yet. Send track ${trackId} to ${friendId}`) })
     }
 
 // /user/playlists

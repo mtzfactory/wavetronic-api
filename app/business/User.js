@@ -1,5 +1,6 @@
 const debug = require('debug')('usr')
 const userData = require('../data/UserData')
+const pushNotification = require('../fcm')
 
 class User {
     updateLastLogin (userId) {
@@ -62,14 +63,14 @@ class User {
                 }
 
                 throw new Error(
-                    res.friendId ?
-                    `'${friend}' is already a friend.` :
-                    `'${friend}' does not exist.`
+                    res.friendId
+                    ? `'${friend}' is already a friend.`
+                    : `'${friend}' does not exist.`
                 )
             })
     }
 
-// /user/friends/:friendId
+// /user/friends/:friend
     updateFriendship (userId, friend) {
         debug('updateFriendship', userId, friend)
         return userData.updateFriendship(userId, friend)
@@ -84,14 +85,37 @@ class User {
     removeFriend (userId, friend) {
         debug('removeFriend', userId, friend)
         return userData.removeFriend(userId, friend)
-            // .then(friends => {
-            //     if (friends) { return friends.length }
-            // })
+            // .then(friends => { if (friends) { return friends.length } })
     }
 
 // /user/friends/:friendId/track/:trackId
-    sendTrackToFriend (userId, friendId, trackId) {
-        return userData.sendTrackToFriend(userId, friendId, trackId)
+    sendTrackToFriend (user, userId, friendId, trackId) {
+        debug('sendTrackToFriend', userId, friendId)
+        return userData.retrieveFriendById(userId, friendId)
+            .then( friend => {
+                if (friend && friend.confirmed) {
+                    return userData.retrievePnTokenById(friendId) 
+                        .then(pnToken => {
+                            if (!pnToken)
+                                throw new Error(`User ${friend.username} has no PN token.`)
+
+                            const { push_notification_token } = pnToken
+                            const message = {
+                                from: user,
+                                track_title: trackId,
+                                title: `${user} sent you this track`,
+                                body: 'hope you enjoy it!',
+                            }
+                            return pushNotification.sendNotification(push_notification_token, message)
+                        })
+                }
+
+                throw new Error(
+                    friend
+                    ? `'${friend.username}' is not a confirmed friend.`
+                    : `'${friendId}' does not exist.`
+                )
+            })
     }
 
 // /user/playlists
@@ -134,9 +158,7 @@ class User {
     removePlaylist (userId, playlistId) {
         debug('removePlaylist', userId, playlistId)
         return userData.removePlaylist(userId, playlistId)
-            // .then(playlists => {
-            //     if (playlists) { return playlists.length }
-            // })
+            // .then(playlists => { if (playlists) { return playlists.length } })
     }
 
 // /user/playlists/:playlistId/track/:trackId
@@ -165,9 +187,7 @@ class User {
     removeTrackFromPlaylist(userId, playlistId, track) {
         debug('removeTrackFromPlaylist', userId, playlistId)
         return userData.removeTrackFromPlaylist(userId, playlistId, track)
-            // .then(tracks => {
-            //     if (tracks) { return tracks.length }
-            // })
+            // .then(tracks => { if (tracks) { return tracks.length } })
     }
 
 // /user/location

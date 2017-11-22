@@ -13,6 +13,7 @@ const {
     MONGO_PORT,
     MONGO_USER,
     MONGO_PASS,
+    FCM_SERVER_KEY,
     JAMENDO_CLIENT_ID,
     JAMENDO_CLIENT_SECRET,
     JAMENDO_REDIRECT_URI
@@ -23,13 +24,15 @@ if (DEBUG)
     debug('> Started:\t\t', new Date().toLocaleString())
     debug('DEBUG\t\t\t', DEBUG)
     debug('PORT\t\t\t', PORT)
-    debug('JAMENDO_CLIENT_ID\t\t', JAMENDO_CLIENT_ID)
-    debug('JAMENDO_CLIENT_SECRET\t', JAMENDO_CLIENT_SECRET)
+    debug('API_SECRET\t\t\t', API_SECRET)
     debug('MONGO_USER\t\t', MONGO_USER)
     debug('MONGO_PASS\t\t', MONGO_PASS)
     debug('MONGO_HOST\t\t', MONGO_HOST)
     debug('MONGO_PORT\t\t', MONGO_PORT)
     debug('MONGO_DB\t\t\t', MONGO_DB)
+    debug('FCM_SERVER_KEY\t\t\t', FCM_SERVER_KEY)
+    debug('JAMENDO_CLIENT_ID\t\t', JAMENDO_CLIENT_ID)
+    debug('JAMENDO_CLIENT_SECRET\t', JAMENDO_CLIENT_SECRET)
 }
 
 if (!PORT || !API_SECRET)
@@ -37,6 +40,9 @@ if (!PORT || !API_SECRET)
 
 if (!MONGO_HOST || !MONGO_PORT || !MONGO_DB || !MONGO_USER || ! MONGO_PASS)
     return debug('> Set the MONGO environment variables first.')
+
+if (!FCM_SERVER_KEY)
+    return debug('> Set the FCM environment variables first.')
 
 if (!JAMENDO_CLIENT_ID || !JAMENDO_CLIENT_SECRET)
     return debug('> Set the JAMENDO environment variables first.')
