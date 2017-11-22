@@ -19,7 +19,7 @@ const cleanJson = jsonTransform(function(json) {
 track.use((req, res, proceed) => {
     const { offset, limit, show } = req.query
 
-    req.offset = offset ? parseInt(offset) : 1
+    req.offset = offset ? parseInt(offset) : 0
     req.limit = limit ? parseInt(limit) : 15
     req.show = show
 
@@ -29,6 +29,7 @@ track.use((req, res, proceed) => {
 track.route('/')
     .get(cleanJson, function(req, res) {
         const { offset, limit } = req
+        const { id } = req.query
         const reqStart = new Date().getTime()
 
         const options = {
@@ -38,11 +39,19 @@ track.route('/')
             featured: true
         }
 
+        if (id) {
+            options.id = id
+            delete options.offset
+            delete options.limit
+        }
+
         musicBusiness.getTracks(options)
             .then( data => {
                 data.headers.response_time = new Date().getTime() - reqStart
-                data.headers.offset = offset
-                data.headers.limit = limit
+                if (!id) {
+                    data.headers.offset = offset
+                    data.headers.limit = limit
+                }
                 res.status(200).json(data)
             })
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )

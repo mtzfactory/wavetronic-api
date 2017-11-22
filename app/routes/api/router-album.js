@@ -20,7 +20,7 @@ const cleanJson = jsonTransform(function(json) {
 album.use((req, res, proceed) => {
     const { offset, limit, show } = req.query
 
-    req.offset = offset ? parseInt(offset) : 1
+    req.offset = offset ? parseInt(offset) : 0
     req.limit = limit ? parseInt(limit) : 15
     req.show = show
 

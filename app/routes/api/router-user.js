@@ -192,11 +192,15 @@ user.route('/playlists/:playlistId')
         const { playlistId } = req.params
 
         User.getTracksFromPlaylist(userId, playlistId)
-            .then( results => {
+            .then( docs => {
                 res.status(200).json({
                     status: 'success',
-                    headers: { response_time: new Date().getTime() - reqStart },
-                    results
+                    headers: {
+                        results_count: docs.headers.results_count,
+                        results_fullcount: docs.headers.results_fullcount,
+                        response_time: new Date().getTime() - reqStart
+                    },
+                    results: docs.results
                 })
             })
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )

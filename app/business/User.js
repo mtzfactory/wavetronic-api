@@ -1,5 +1,6 @@
 const debug = require('debug')('usr')
 const userData = require('../data/UserData')
+const musicBusiness = require('./Music')
 const pushNotification = require('../fcm')
 
 class User {
@@ -153,6 +154,15 @@ class User {
     getTracksFromPlaylist (userId, playlistId) {
         debug('getTracksFromPlaylist', userId, playlistId)
         return userData.getTracksFromPlaylist(userId, playlistId)
+            .then(tracks => {
+                if (tracks) {
+                    const options = {}
+                    options.id = tracks.join('+')
+                    return musicBusiness.getTracks(options)
+                }
+
+                throw new Error(`no traks in ${playlistId}`)
+            })
     }
 
     removePlaylist (userId, playlistId) {
