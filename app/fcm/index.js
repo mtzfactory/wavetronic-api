@@ -9,6 +9,7 @@ class PushNotification {
     }
 
     sendNotification (deviceToken, message) {
+        const id = uuidv4()
         var message = {
             to: deviceToken, // required fill with device token or topics
             data: {
@@ -19,9 +20,10 @@ class PushNotification {
                     body: message.body,
                     sound: 'default',
                     show_in_foreground: true,
-                    id: uuidv4()
+                    id
                 })
             },
+            id,
             // notification: {
             //     title: message.title,
             //     body: message.body,
