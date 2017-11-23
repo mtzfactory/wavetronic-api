@@ -21,9 +21,9 @@ class PushNotification {
                     sound: 'default',
                     show_in_foreground: true,
                     id
-                })
+                }),
+                id,
             },
-            id,
             // notification: {
             //     title: message.title,
             //     body: message.body,
