@@ -1,5 +1,6 @@
 const FCM = require('fcm-push')
 
+const uuidv4 = require('uuid/v4')
 const { FCM_SERVER_KEY } = require('../constants')
 
 class PushNotification {
@@ -12,12 +13,13 @@ class PushNotification {
             to: deviceToken, // required fill with device token or topics
             data: {
                 friend: message.from,
-                track: message.track,
+                track: JSON.stringify(message.track),
                 custom_notification: JSON.stringify({
                     title: message.title,
                     body: message.body,
                     sound: 'default',
-                    show_in_foreground: true
+                    show_in_foreground: true,
+                    id: uuidv4()
                 })
             },
             // notification: {
