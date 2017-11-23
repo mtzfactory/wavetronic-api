@@ -97,17 +97,26 @@ class User {
                 if (friend && friend.confirmed) {
                     return userData.retrievePnTokenById(friendId) 
                         .then(pnToken => {
-                            if (!pnToken)
+                            const { push_notification_token } = pnToken
+
+                            if (!push_notification_token)
                                 throw new Error(`User ${friend.username} has no PN token.`)
 
-                            const { push_notification_token } = pnToken
-                            const message = {
-                                from: user,
-                                track_title: trackId,
-                                title: `${user} sent you this track`,
-                                body: 'hope you enjoy it!',
-                            }
-                            return pushNotification.sendNotification(push_notification_token, message)
+                            return musicBusiness.getTracks({id: trackId})
+                                .then(docs => {
+                                    if (!docs)
+                                        throw new Error(`Track ${trackId} does not exist.`)
+
+                                    const message = {
+                                        from: user,
+                                        title: `${user} sent you this track`,
+                                        body: docs.results[0].name,
+                                        track: docs.results[0]
+                                    }
+
+                                    return pushNotification.sendNotification(push_notification_token, message)
+                                })
+    
                         })
                 }
 

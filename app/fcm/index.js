@@ -12,21 +12,30 @@ class PushNotification {
             to: deviceToken, // required fill with device token or topics
             data: {
                 friend: message.from,
-                track_title: message.track_title,
-                title: message.title,
-                body: message.body
+                track: message.track,
+                // priority: 'high',
+                // show_in_foreground: true,
+                // time_to_live: 60 * 60 * 24,
+                custom_notification: JSON.stringify({
+                    title: message.title,
+                    body: message.body,
+                    sound: 'default',
+                    show_in_foreground: true
+                })
             },
-            notification: {
-                title: message.title,
-                body: message.body,
-                sound: 'default'
-            },
+            // notification: {
+            //     title: message.title,
+            //     body: message.body,
+            //     sound: 'default'
+            // },
+            priority: 'high',
+            // showInForeground: true,
+            // show_in_foreground: true,
+            // contentAvailable: true,
             content_available: true,
-            priority: "high",
-            time_to_ive: 60 * 60 * 24
+            // timeToLive: 60 * 60 * 24,
+            time_to_live: 60 * 60 * 24
         }
-
-        console.log(message)
 
         return this.fcm.send(message)
     }
