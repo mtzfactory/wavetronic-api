@@ -13,9 +13,6 @@ class PushNotification {
             data: {
                 friend: message.from,
                 track: message.track,
-                // priority: 'high',
-                // show_in_foreground: true,
-                // time_to_live: 60 * 60 * 24,
                 custom_notification: JSON.stringify({
                     title: message.title,
                     body: message.body,
@@ -29,11 +26,8 @@ class PushNotification {
             //     sound: 'default'
             // },
             priority: 'high',
-            // showInForeground: true,
-            // show_in_foreground: true,
-            // contentAvailable: true,
+            show_in_foreground: true,
             content_available: true,
-            // timeToLive: 60 * 60 * 24,
             time_to_live: 60 * 60 * 24
         }
 
