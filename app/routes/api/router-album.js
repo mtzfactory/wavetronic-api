@@ -30,7 +30,7 @@ album.use((req, res, proceed) => {
 album.route('/')
     .get(cleanJson, function(req, res) {
         const { offset, limit } = req
-        const { name } = req.query
+        const { namesearch } = req.query
         const reqStart = new Date().getTime()
 
         const options = {
@@ -40,8 +40,8 @@ album.route('/')
             //order: 'popularity_month',
         }
 
-        if (name) {
-            options.name = name
+        if (namesearch) {
+            options.namesearch = namesearch
         }
 
         musicBusiness.getAlbums(options)

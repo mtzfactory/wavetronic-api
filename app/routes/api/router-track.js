@@ -29,7 +29,7 @@ track.use((req, res, proceed) => {
 track.route('/')
     .get(cleanJson, function(req, res) {
         const { offset, limit } = req
-        const { id, name } = req.query
+        const { id, namesearch } = req.query
         const reqStart = new Date().getTime()
 
         const options = {
@@ -46,8 +46,8 @@ track.route('/')
             delete options.limit
         }
 
-        if (name) {
-            options.name = name
+        if (namesearch) {
+            options.namesearch = namesearch
         }
 
         musicBusiness.getTracks(options)

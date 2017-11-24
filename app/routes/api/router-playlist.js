@@ -29,7 +29,7 @@ playlist.use((req, res, proceed) => {
 playlist.route('/')
     .get(cleanJson, function(req, res) {
         const { offset, limit } = req
-        const { name } = req.query
+        const { namesearch } = req.query
         const reqStart = new Date().getTime()
 
         const options = {
@@ -38,8 +38,8 @@ playlist.route('/')
             order: 'creationdate_desc'
         }
 
-        if (name) {
-            options.name = name
+        if (namesearch) {
+            options.namesearch = namesearch
         }
 
         musicBusiness.getPlaylists(options)
