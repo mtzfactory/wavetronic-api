@@ -29,20 +29,25 @@ track.use((req, res, proceed) => {
 track.route('/')
     .get(cleanJson, function(req, res) {
         const { offset, limit } = req
-        const { id } = req.query
+        const { id, name } = req.query
         const reqStart = new Date().getTime()
 
         const options = {
             offset,
             limit,
-            order: 'popularity_month',
-            featured: true
+            boost: 'popularity_month',
+            //order: 'popularity_month',
+            //featured: true
         }
 
         if (id) {
             options.id = id
             delete options.offset
             delete options.limit
+        }
+
+        if (name) {
+            options.name = name
         }
 
         musicBusiness.getTracks(options)
