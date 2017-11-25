@@ -35,9 +35,9 @@ track.route('/')
         const options = {
             offset,
             limit,
-            //boost: 'popularity_month',
-            order: 'releasedate_desc',
-            //featured: true
+            boost: 'popularity_month',
+            //order: 'releasedate_desc',
+            featured: true
         }
 
         if (id) {
