@@ -71,7 +71,7 @@ class User {
             })
     }
 
-// /user/friends/:friend
+// /user/friends/:friendId
     updateFriendship (userId, friendId) {
         debug('updateFriendship', userId, friendId)
         return userData.updateFriendship(userId, friendId)
