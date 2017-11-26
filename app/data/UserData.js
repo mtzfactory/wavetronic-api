@@ -149,7 +149,7 @@ class UserData {
         return User.findOneAndUpdate(
             { _id: userId },
             { $pull: { friends: { _id: friendId } } },
-            { new: true, fields: { 'friends.username': 1, 'friends.confirmed': 1 } })
+            { new: true, fields: { 'friends._id': 1, 'friends.username': 1, 'friends.confirmed': 1 } })
             .exec() // Para que devuelva un Promise.
             .then(({friends}) => friends)
     }
