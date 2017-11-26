@@ -136,19 +136,19 @@ class UserData {
     }
 
 // /user/friends/:friend
-    updateFriendship (userId, friend) {
+    updateFriendship (userId, friendId) {
         return User.findOneAndUpdate(
-            { _id: userId, 'friends.username': friend },
+            { _id: userId, 'friends._id': friendId },
             { 'friends.$.confirmed': true },
             { new: true, fields: { 'friends.username': 1, 'friends.confirmed': 1 } })
             .exec() // Para que devuelva un Promise.
             .then(({friends}) => friends)
     }
 
-    removeFriend (userId, friend) {
+    removeFriend (userId, friendId) {
         return User.findOneAndUpdate(
             { _id: userId },
-            { $pull: { friends: { username: friend } } },
+            { $pull: { friends: { _id: friendId } } },
             { new: true, fields: { 'friends.username': 1, 'friends.confirmed': 1 } })
             .exec() // Para que devuelva un Promise.
             .then(({friends}) => friends)

@@ -72,20 +72,20 @@ class User {
     }
 
 // /user/friends/:friend
-    updateFriendship (userId, friend) {
-        debug('updateFriendship', userId, friend)
-        return userData.updateFriendship(userId, friend)
+    updateFriendship (userId, friendId) {
+        debug('updateFriendship', userId, friendId)
+        return userData.updateFriendship(userId, friendId)
             .then(friends => {
                 //if (friends) { return friends.filter(f => f.username === friend) }
                 if (friends) return friends
 
-                throw new Error(`'${friend}' is not your friend.`)
+                throw new Error(`'${friendId}' is not your friend.`)
             })
     }
 
-    removeFriend (userId, friend) {
-        debug('removeFriend', userId, friend)
-        return userData.removeFriend(userId, friend)
+    removeFriend (userId, friendId) {
+        debug('removeFriend', userId, friendId)
+        return userData.removeFriend(userId, friendId)
             // .then(friends => { if (friends) { return friends.length } })
     }
 

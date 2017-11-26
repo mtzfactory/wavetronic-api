@@ -89,15 +89,13 @@ user.route('/friends')
             })
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
-
-user.route('/friends/:friend')
-    .put(function(req, res) {
+    .put(function(req, res) { //user.route('/friends/:friendId')
         const reqStart = new Date().getTime()
         const { id: userId, username } = req.user // Passport
         const { offset, limit, show, hide } = req // middleware del router api (index.js)
-        const { friend } = req.params
+        const { id } = req.body //const { friendId } = req.params
 
-        User.updateFriendship(userId, friend)
+        User.updateFriendship(userId, id)
             .then( results => {
                 res.status(200).json({
                     status: 'success',
@@ -111,9 +109,9 @@ user.route('/friends/:friend')
         const reqStart = new Date().getTime()
         const { id: userId, username } = req.user // Passport
         const { offset, limit, show, hide } = req // middleware del router api (index.js)
-        const { friendId } = req.params
+        const { id } = req.body //const { friendId } = req.params
 
-        User.removeFriend(userId, friend)
+        User.removeFriend(userId, id)
             .then( results => {
                 res.status(200).json({
                     status: 'success',
