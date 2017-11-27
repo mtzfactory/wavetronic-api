@@ -2,6 +2,7 @@ const debug = require('debug')('usr')
 const userData = require('../data/UserData')
 const musicBusiness = require('./Music')
 const pushNotification = require('../fcm')
+const _ = require('lodash')
 
 class User {
     updateLastLogin (userId) {
@@ -23,13 +24,32 @@ class User {
         return userData.updatePushNotificationToken(userId, pnToken)
     }
 
+// /find
+    searchByUsername(userId, userName, friendName, options) {
+        debug('searchByUsername', friendName)
+        return userData.searchByUsername(friendName)
+            .then(users => {
+                return userData.searchMyFriendsByUsername(userId, userName, friendName)
+                    .then(friends => {
+                        friends.map(f => _.remove(users, { username: f.username }))
+                        const total = friends.concat(users)
+                        const page = {}
+                        page.results = total.slice(options.offset, options.offset + options.limit)
+                        page.results_count = page.results.length
+                        page.results_fullcount = total.length
+                        return page
+                    })
+            })
+            
+    }
+
 // /user/friends
     getFriends (userId, options) {
         debug('getFriends', userId)
         return userData.getFriends(userId, options)
-            .then( docs => {
+            .then(docs => {
                 return userData.getAllMyFriends(userId, {})
-                    .then( total => {
+                    .then(total => {
                         docs.results_count = docs.friends.length
                         docs.results_fullcount = total.length
                         return docs
@@ -40,10 +60,10 @@ class User {
     areWeFriends (userId, friend) {
         debug('areWeFriends', userId, friend)
         return userData.getIdByUsername(friend)
-            .then( friendId => {
+            .then(friendId => {
                 if (friendId) {
                     return userData.retrieveFriendById(userId, friendId)
-                        .then( friend => {
+                        .then(friend => {
                             if (friend)
                                 return { friendship: true, friendId }
                             else
@@ -57,7 +77,7 @@ class User {
     addFriend (userId, friend) {
         debug('addFriend', userId, friend)
         return this.areWeFriends(userId, friend)
-            .then( res => {
+            .then(res => {
                 if (res.friendship === false && res.friendId) {
                     return userData.addFriend(userId, res.friendId, friend)
                         //.then(friends => { return friends.filter(f => f.username === friend) })
@@ -93,7 +113,7 @@ class User {
     sendTrackToFriend (user, userId, friendId, trackId) {
         debug('sendTrackToFriend', userId, friendId)
         return userData.retrieveFriendById(userId, friendId)
-            .then( friend => {
+            .then(friend => {
                 if (friend && friend.confirmed) {
                     return userData.retrievePnTokenById(friendId) 
                         .then(pnToken => {
@@ -132,9 +152,9 @@ class User {
     getPlaylists (userId, options) {
         debug('getPlaylists', userId)
         return userData.getPlaylists(userId, options)
-            .then( docs => {
+            .then(docs => {
                 return userData.getAllMyPlaylists(userId, {})
-                    .then( total => {
+                    .then(total => {
                         docs.results_count = docs.playlists.length
                         docs.results_fullcount = total.length
                         return docs

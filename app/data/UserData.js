@@ -43,7 +43,7 @@ class UserData {
 
                 if (!single) validateOptions(options)
 
-                let projection = {} // ex: { restaurant_id: 1, _id: 0 }
+                let projection = {} // ex: { _id: 0, restaurant_id: 1 }
 
                 if (options.hide)
                     options.hide.split(',').forEach(field => projection[field] = 0)
@@ -51,14 +51,16 @@ class UserData {
                     options.show.split(',').forEach(field => projection[field] = 1)
 
                 options.select = projection //''
+
+                // options.select = ''
                 // if (options.hide) // el orden es importante, hide primero...
                 //     options.select += options.hide.split(',').map(field => `-${field}`).join(' ')
                 // if (options.show)
                 //     options.select += ' ' + options.show.split(',').join(' ')
 
-                if (options.slice) {
-                    projection = Object.assign(projection, options.slice)
-                }
+                // if (options.slice) {
+                //     projection = Object.assign(projection, options.slice)
+                // }
 
                 return single
                     ? User.findOne(conditions, projection)
@@ -87,6 +89,7 @@ class UserData {
         return this._query(() => {
                 if (!userId) throw new Error(`userId cannot be ${userId}`)
             }, { _id: userId }, { hide: '_id,playlists._id,friends._id' }, true)
+            .then( docs => { console.log(docs); return docs })
     }
 
     updatePushNotificationToken(userId, pnToken) {
@@ -95,6 +98,33 @@ class UserData {
             { 'push_notification_token': pnToken },
             { new: true, fields: { '_id': 0, 'username': 1, 'push_notification_token': 1 } })
             .exec() // Para que devuelva un Promise.
+    }
+
+// /find
+    searchByUsername(username) {
+        return User.find({ username: { '$regex': username, '$options': 'i' } }, { _id: 1, username: 1 })
+            .exec() // Para que devuelva un Promise.
+    }
+
+    searchMyFriendsByUsername(userId, username,friendName) {
+        // const projection = { _id: 0, 'friends._id': 1, 'friends.username': 1, 'friends.confirmed': 1 }
+        // return User.find({ _id: userId, friends: { $elemMatch: { username: { '$regex': username, '$options': 'i' } } } }, projection)
+        //     .exec() // Para que devuelva un Promise.
+        return User.aggregate(
+                { $match: { 'username': username } },
+                { $unwind: '$friends' },
+                { $match: { 'friends.username': { '$regex': friendName, '$options': 'i' } } },
+                { $project : { '_id': 0, 'friends' : 1 } }
+            )
+            .then(docs => {
+                const result = []
+                docs.map(d => result.push(d.friends) )
+                return result
+            })
+
+
+// db.getCollection('users').find({username: 'ricardo', 'friends.username': { '$regex': 'jo', '$options': 'i' }}, { friends: {$elemMatch: {'username': { '$regex': 'jo', '$options': 'i' }} }})
+
     }
 
 // /user/friends

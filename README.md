@@ -7,6 +7,8 @@
 
 ## WAVE MY BEAT ~ api server.
 
+Cocinandose actualmente...
+
 ### INSTALACION
 
 ### TEST
