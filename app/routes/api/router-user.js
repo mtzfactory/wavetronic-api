@@ -79,25 +79,45 @@ user.route('/find')
 user.route('/friends')
     .get(function(req, res) {
         const reqStart = new Date().getTime()
+        const { name } = req.query
         const { id: userId, username } = req.user // Passport
         const { offset, limit, show, hide } = req // middleware del router api (index.js)
         const options = { offset, limit, show, hide }
 
-        User.getFriends(userId, options)
-            .then( results => {
-                res.status(200).json({
-                    status: 'success',
-                    headers: {
-                        offset,
-                        limit,
-                        results_count: results.results_count,
-                        results_fullcount: results.results_fullcount,
-                        response_time: new Date().getTime() - reqStart
-                    },
-                    results: results.friends
+        if (name) {
+            User.searchByUsername(userId, username, name, options)            
+                .then( results => {
+                    res.status(200).json({
+                        status: 'success',
+                        headers: {
+                            offset,
+                            limit,
+                            results_count: results.results_count,
+                            results_fullcount: results.results_fullcount,
+                            response_time: new Date().getTime() - reqStart
+                        },
+                        results: results.results
+                    })
                 })
-            })
-            .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
+                .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
+        }
+        else {
+            User.getFriends(userId, options)
+                .then( results => {
+                    res.status(200).json({
+                        status: 'success',
+                        headers: {
+                            offset,
+                            limit,
+                            results_count: results.results_count,
+                            results_fullcount: results.results_fullcount,
+                            response_time: new Date().getTime() - reqStart
+                        },
+                        results: results.friends
+                    })
+                })
+                .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
+        }
     })
     .post(function(req, res) {
         const reqStart = new Date().getTime()
