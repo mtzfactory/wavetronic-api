@@ -10,32 +10,32 @@ class PushNotification {
 
     sendNotification (deviceToken, message) {
         const id = uuidv4()
-        var message = {
+        var notification = {
             to: deviceToken, // required fill with device token or topics
             data: {
                 friend: message.from,
-                track: JSON.stringify(message.track),
                 custom_notification: JSON.stringify({
                     title: message.title,
                     body: message.body,
                     sound: 'default',
                     show_in_foreground: true,
-                    id
+                    id,
                 }),
                 id,
             },
-            // notification: {
-            //     title: message.title,
-            //     body: message.body,
-            //     sound: 'default'
-            // },
             priority: 'high',
             show_in_foreground: true,
             content_available: true,
             time_to_live: 60 * 60 * 24
         }
 
-        return this.fcm.send(message)
+        if (message.track)
+            notification.data.track = JSON.stringify(message.track)
+
+        if (message.userId)
+            notification.data.userId = message.userId
+
+        return this.fcm.send(notification)
     }
 }
 

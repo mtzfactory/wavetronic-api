@@ -117,7 +117,7 @@ user.route('/friends/:friendId')
         const { offset, limit, show, hide } = req // middleware del router api (index.js)
         const { friendId } = req.params
 
-        User.updateFriendship(friendId, userId)//(userId, friendId)
+        User.updateFriendship(username, userId, friendId)
             .then( results => {
                 res.status(200).json({
                     status: 'success',

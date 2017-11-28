@@ -102,7 +102,6 @@ class User {
                         }
 
                         return pushNotification.sendNotification(push_notification_token, message)
-
                     })
                 }
 
@@ -115,12 +114,29 @@ class User {
     }
 
 // /user/friends/:friendId
-    updateFriendship (userId, friendId) {
+    updateFriendship (username, userId, friendId) {
         debug('updateFriendship', userId, friendId)
-        return userData.updateFriendship(userId, friendId)
+        return userData.updateFriendship(friendId, userId)
             .then(friends => {
                 //if (friends) { return friends.filter(f => f.username === friend) }
-                if (friends) return friends
+                if (friends) {
+                    return userData.retrievePnTokenById(friendId) 
+                        .then(pnToken => {
+                            const { push_notification_token } = pnToken
+
+                            if (!push_notification_token)
+                                throw new Error(`User ${username} has no PN token.`)
+                            
+                            const message = {
+                                from: username,
+                                title: `Friendship accepted`,
+                                body: `from ${username}`,
+                                userId,
+                            }
+
+                        return pushNotification.sendNotification(push_notification_token, message)
+                    })
+                }
 
                 throw new Error(`'${friendId}' is not your friend.`)
             })
