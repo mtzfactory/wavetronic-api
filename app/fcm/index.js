@@ -13,6 +13,7 @@ class PushNotification {
         var notification = {
             to: deviceToken, // required fill with device token or topics
             data: {
+                type: message.track ? 'track' : 'friendship',
                 friend: message.from,
                 custom_notification: JSON.stringify({
                     title: message.title,
