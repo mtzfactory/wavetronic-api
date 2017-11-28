@@ -24,7 +24,7 @@ class User {
         return userData.updatePushNotificationToken(userId, pnToken)
     }
 
-// /find
+// /user/friends
     searchByUsername(userId, userName, friendName, options) {
         debug('searchByUsername', friendName)
         return userData.searchByUsername(friendName)
@@ -43,7 +43,6 @@ class User {
             
     }
 
-// /user/friends
     getFriends (userId, options) {
         debug('getFriends', userId)
         return userData.getFriends(userId, options)
@@ -57,30 +56,54 @@ class User {
             })
     }
 
-    areWeFriends (userId, friend) {
-        debug('areWeFriends', userId, friend)
+    isAlreadyInFriendsList (userId, friend) {
+        debug('isAlreadyInFriendsList', userId, friend)
         return userData.getIdByUsername(friend)
             .then(friendId => {
                 if (friendId) {
                     return userData.retrieveFriendById(userId, friendId)
                         .then(friend => {
                             if (friend)
-                                return { friendship: true, friendId }
+                                return { alreadyPresent: true, friendId }
                             else
-                                return { friendship: false, friendId }
+                                return { alreadyPresent: false, friendId }
                         })
                 }
-                else return { friendship: false, friendId: undefined }
+                else return { alreadyPresent: false, friendId: undefined }
             })
     }
 
-    addFriend (userId, friend) {
+    addFriend (user, userId, friend) {
         debug('addFriend', userId, friend)
-        return this.areWeFriends(userId, friend)
+        return this.isAlreadyInFriendsList(userId, friend)
             .then(res => {
-                if (res.friendship === false && res.friendId) {
-                    return userData.addFriend(userId, res.friendId, friend)
-                        //.then(friends => { return friends.filter(f => f.username === friend) })
+                console.log(res)
+                if (res.alreadyPresent === false && res.friendId) {
+                    userData.addFriend(userId, res.friendId, friend)
+                        .then(res.alreadyPresent = true)
+                        .catch(error => { throw new Error(error.message) })
+                }
+
+                console.log(res)
+
+                if (res.alreadyPresent === true) {
+                    return userData.retrievePnTokenById(res.friendId) 
+                    .then(pnToken => {
+                        const { push_notification_token } = pnToken
+
+                        if (!push_notification_token)
+                            throw new Error(`User ${friend} has no PN token.`)
+                        
+                        const message = {
+                            from: user,
+                            title: `Friend request`,
+                            body: `from ${user}`,
+                            userId,
+                        }
+
+                        return pushNotification.sendNotification(push_notification_token, message)
+
+                    })
                 }
 
                 throw new Error(

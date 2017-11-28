@@ -50,32 +50,6 @@ user.route('/')
         }
     })
 
-user.route('/find')
-    .get(function(req, res) {
-        const reqStart = new Date().getTime()
-        const { q } = req.query
-        const { id: userId, username } = req.user // Passport
-        const { offset, limit, show, hide } = req // middleware del router api (index.js)
-        const options = { offset, limit, show, hide }
-
-         User.searchByUsername(userId, username, q, options)            
-            .then( results => {
-                res.status(200).json({
-                    status: 'success',
-                    headers: {
-                        offset,
-                        limit,
-                        results_count: results.results_count,
-                        results_fullcount: results.results_fullcount,
-                        response_time: new Date().getTime() - reqStart
-                    },
-                    results: results.results
-                })
-            })
-            .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
-
-    })
-
 user.route('/friends')
     .get(function(req, res) {
         const reqStart = new Date().getTime()
@@ -125,7 +99,7 @@ user.route('/friends')
         const { offset, limit, show, hide } = req // middleware del router api (index.js)
         const { name } = req.body
 
-        User.addFriend(userId, name)
+        User.addFriend(username, userId, name)
             .then( results => {
                 res.status(200).json({
                     status: 'success',
@@ -143,7 +117,7 @@ user.route('/friends/:friendId')
         const { offset, limit, show, hide } = req // middleware del router api (index.js)
         const { friendId } = req.params
 
-        User.updateFriendship(userId, friendId)
+        User.updateFriendship(friendId, userId)//(userId, friendId)
             .then( results => {
                 res.status(200).json({
                     status: 'success',
