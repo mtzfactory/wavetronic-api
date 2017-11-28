@@ -73,18 +73,15 @@ class User {
             })
     }
 
-    addFriend (user, userId, friend) {
-        debug('addFriend', userId, friend)
+    addFriend (username, userId, friend) {
+        debug('addFriend', username, userId, friend)
         return this.isAlreadyInFriendsList(userId, friend)
             .then(res => {
-                console.log(res)
                 if (res.alreadyPresent === false && res.friendId) {
                     userData.addFriend(userId, res.friendId, friend)
                         .then(res.alreadyPresent = true)
                         .catch(error => { throw new Error(error.message) })
                 }
-
-                console.log(res)
 
                 if (res.alreadyPresent === true) {
                     return userData.retrievePnTokenById(res.friendId) 
@@ -95,10 +92,11 @@ class User {
                             throw new Error(`User ${friend} has no PN token.`)
                         
                         const message = {
-                            from: user,
-                            title: `Friend request`,
-                            body: `from ${user}`,
+                            type: 'friendship-request',
+                            fromUser: username,
                             userId,
+                            title: `Friend request`,
+                            body: `from ${username}`,
                         }
 
                         return pushNotification.sendNotification(push_notification_token, message)
@@ -115,7 +113,7 @@ class User {
 
 // /user/friends/:friendId
     updateFriendship (username, userId, friendId) {
-        debug('updateFriendship', userId, friendId)
+        debug('updateFriendship', username, userId, friendId)
         return userData.updateFriendship(friendId, userId)
             .then(friends => {
                 //if (friends) { return friends.filter(f => f.username === friend) }
@@ -128,11 +126,14 @@ class User {
                                 throw new Error(`User ${username} has no PN token.`)
                             
                             const message = {
-                                from: username,
-                                title: `Friendship accepted`,
-                                body: `from ${username}`,
+                                type: 'confirmation',
+                                fromUser: username,
                                 userId,
+                                title: `Friendship accepted`,
+                                body: `from ${username}`
                             }
+
+                            console.log('updateFriendship', message)
 
                         return pushNotification.sendNotification(push_notification_token, message)
                     })
@@ -149,7 +150,7 @@ class User {
     }
 
 // /user/friends/:friendId/track/:trackId
-    sendTrackToFriend (user, userId, friendId, trackId) {
+    sendTrackToFriend (username, userId, friendId, trackId) {
         debug('sendTrackToFriend', userId, friendId)
         return userData.retrieveFriendById(userId, friendId)
             .then(friend => {
@@ -167,8 +168,10 @@ class User {
                                         throw new Error(`Track ${trackId} does not exist.`)
 
                                     const message = {
-                                        from: user,
-                                        title: `${user} sent you this track`,
+                                        type: 'track',
+                                        fromUser: username,
+                                        userId,
+                                        title: `${username} sent you this track`,
                                         body: docs.results[0].name,
                                         track: docs.results[0]
                                     }
