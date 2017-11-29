@@ -33,7 +33,6 @@ class UserData {
         const projection = {}; projection._id = 0; projection[list + '.$'] = 1
 
         return User.findOne(filter, projection).exec() // Para que devuelva un Promise.
-        //return User.find(filter, projection).exec() // Para que devuelva un Promise.
     }
 
     _query (validate, conditions, options, single) {
@@ -50,13 +49,7 @@ class UserData {
                 if (options.show)
                     options.show.split(',').forEach(field => projection[field] = 1)
 
-                options.select = projection //''
-
-                // options.select = ''
-                // if (options.hide) // el orden es importante, hide primero...
-                //     options.select += options.hide.split(',').map(field => `-${field}`).join(' ')
-                // if (options.show)
-                //     options.select += ' ' + options.show.split(',').join(' ')
+                options.select = projection
 
                 if (options.slice) {
                     projection = Object.assign(projection, options.slice)
@@ -121,7 +114,7 @@ class UserData {
     }
 
     getFriends (userId, options) {
-        options.show = 'friends._id,friends.username,friends.confirmed'
+        options.show = 'friends._id,friends.username,friends.confirmed,friends.last_modified'
         options.slice = { friends: { $slice: [options.offset, options.limit] } }
         return this._query(() => {
                 if (!userId) throw new Error(`userId cannot be ${userId}`)
@@ -130,7 +123,7 @@ class UserData {
     }
 
     getAllMyFriends (userId, options) {
-        options.show = 'friends._id,friends.username,friends.confirmed'
+        options.show = 'friends._id,friends.username,friends.confirmed,friends.last_modified'
         return this._query(() => {
                 if (!userId) throw new Error(`userId cannot be ${userId}`)
             }, { _id: userId }, options, true)
@@ -149,22 +142,42 @@ class UserData {
     }
 
     addFriend (userId, friendId, friend) {
+        const fields = { 'friends._id': 1, 'friends.username': 1, 'friends.confirmed': 1, 'friends.last_modified': 1 }
         return  User.findOneAndUpdate(
             { _id: userId },
-            { $push: { friends: { _id: friendId, username: friend } } },
-            { safe: true, upsert: false, new: true, fields: { 'friends.username': 1, 'friends.confirmed': 1 } })
+            { $push: { friends: { 
+                $each: [{ _id: friendId, username: friend }],
+                $sort: { last_modified: -1, confirmed: -1 } 
+            } } },
+            { safe: true, upsert: false, new: true, fields })
             .exec() // Para que devuelva un Promise.
             .then(({friends}) => friends)
     }
 
 // /user/friends/:friend
-    updateFriendship (userId, friendId) {
-        return User.findOneAndUpdate(
-            { _id: userId, 'friends._id': friendId },
-            { 'friends.$.confirmed': true },
-            { new: true, fields: { 'friends._id': 1, 'friends.username': 1, 'friends.confirmed': 1 } })
+    _reorderFriends (userId) {
+        const fields = { 'friends._id': 1, 'friends.username': 1, 'friends.confirmed': 1, 'friends.last_modified': 1 }
+        return  User.findOneAndUpdate(
+            { _id: userId },
+            { $push: { friends: { 
+                $each: [],
+                $sort: { last_modified: -1, confirmed: -1 } 
+            } } },
+            { safe: true, upsert: false, new: true, fields })
             .exec() // Para que devuelva un Promise.
             .then(({friends}) => friends)
+    }
+
+    updateFriendship (userId, friendId) {
+        const fields = { 'friends._id': 1, 'friends.username': 1, 'friends.confirmed': 1, 'friends.last_modified': 1 }
+        return User.findOneAndUpdate(
+            { _id: userId, 'friends._id': friendId },
+            { 'friends.$.confirmed': true,
+              $currentDate: { 'friends.$.last_modified': true }
+            },
+            { safe: true, upsert: false, new: true, fields })
+            .exec() // Para que devuelva un Promise.
+            .then(this._reorderFriends(userId))
     }
 
     removeFriend (userId, friendId) {

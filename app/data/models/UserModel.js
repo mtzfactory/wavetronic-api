@@ -11,7 +11,8 @@ const User = new mongoose.Schema({
         {
             id: mongoose.Schema.Types.ObjectId,
             username: String,
-            confirmed: { type: Boolean, default: false }
+            confirmed: { type: Boolean, default: false },
+            last_modified: { type: Date, default: Date.now },
         }
     ],
     send_location: { type: Boolean, default: true },

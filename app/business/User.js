@@ -124,7 +124,6 @@ class User {
                 if (friends) {
                     return userData.retrievePnTokenById(friendId) 
                         .then(pnToken => {
-                            console.log(pnToken)
                             const { push_notification_token, username: friendName } = pnToken
 
                             if (!push_notification_token)
@@ -137,8 +136,6 @@ class User {
                                 title: `Friendship accepted`,
                                 body: `from ${username}`
                             }
-
-                            console.log('updateFriendship', message)
 
                         return pushNotification.sendNotification(push_notification_token, message)
                     })
