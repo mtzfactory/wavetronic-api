@@ -227,14 +227,19 @@ class User {
     }
 
 // /user/playlists/:playlistId
-    getTracksFromPlaylist (userId, playlistId) {
+    getTracksFromPlaylist (userId, playlistId, options) {
         debug('getTracksFromPlaylist', userId, playlistId)
-        return userData.getTracksFromPlaylist(userId, playlistId)
+        return userData.getTracksFromPlaylist(userId, playlistId, options)
             .then(tracks => {
                 if (tracks) {
-                    const options = {}
-                    options.id = tracks.join('+')
-                    return musicBusiness.getTracks(options)
+                    const { offset, limit } = options
+                    const filtered = {}
+                    filtered.id = tracks.slice(offset, offset + limit).join('+')
+                    return musicBusiness.getTracks(filtered)
+                        .then(results => {
+                            results.headers.results_fullcount = tracks.length
+                            return results
+                        })
                 }
 
                 throw new Error(`no traks in ${playlistId}`)

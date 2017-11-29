@@ -171,7 +171,6 @@ user.route('/playlists')
 
         User.getPlaylists(userId, options)
             .then( results => {
-                
                 res.status(200).json({
                     status: 'success',
                     headers: {
@@ -203,15 +202,15 @@ user.route('/playlists')
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
     })
 
-
 user.route('/playlists/:playlistId')
     .get(function(req, res) {
         const reqStart = new Date().getTime()
         const { id: userId, username } = req.user // Passport
         const { offset, limit, show, hide } = req // middleware del router api (index.js)
+        const options = { offset, limit, show, hide }
         const { playlistId } = req.params
 
-        User.getTracksFromPlaylist(userId, playlistId)
+        User.getTracksFromPlaylist(userId, playlistId, options)
             .then( docs => {
                 res.status(200).json({
                     status: 'success',
