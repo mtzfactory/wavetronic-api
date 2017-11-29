@@ -25,14 +25,16 @@ class User {
     }
 
 // /user/friends
-    searchByUsername(userId, userName, friendName, options) {
-        debug('searchByUsername', friendName)
-        return userData.searchByUsername(friendName)
-            .then(users => {
-                return userData.searchMyFriendsByUsername(userId, userName, friendName)
-                    .then(friends => {
-                        friends.map(f => _.remove(users, { username: f.username }))
-                        const total = friends.concat(users)
+    searchByUsername(userId, username, qs, options) {
+        debug('searchByUsername', qs)
+        return userData.searchMyFriendsByUsername(userId, username, qs.search)
+            .then(friends => {
+                if (qs.only_confirmed) _.remove(friends, { confirmed: false })
+                return userData.searchByUsername(qs.search)
+                    .then(users => {
+                        _.remove(users, { username })
+                        if (friends) friends.map(f => _.remove(users, { username: f.username }))
+                        const total = qs.only_friends ? friends : friends.concat(users)
                         const page = {}
                         page.results = total.slice(options.offset, options.offset + options.limit)
                         page.results_count = page.results.length
@@ -43,15 +45,18 @@ class User {
             
     }
 
-    getFriends (userId, options) {
+    getFriends (userId, qs, options) {
         debug('getFriends', userId)
         return userData.getFriends(userId, options)
-            .then(docs => {
+            .then(friends => {
                 return userData.getAllMyFriends(userId, {})
                     .then(total => {
-                        docs.results_count = docs.friends.length
-                        docs.results_fullcount = total.length
-                        return docs
+                        if (qs.only_confirmed) _.remove(friends, { confirmed: false })
+                        const page = {}
+                        page.results_count = friends.length
+                        page.results_fullcount = qs.only_confirmed ? friends.length : total.length
+                        page.results = friends
+                        return page
                     })
             })
     }
@@ -112,18 +117,18 @@ class User {
     }
 
 // /user/friends/:friendId
-    updateFriendship (username, userId, friendId) {
-        debug('updateFriendship', username, userId, friendId)
+    updateFriendship (userId, username, friendId) {
+        debug('updateFriendship', userId, username, friendId)
         return userData.updateFriendship(friendId, userId)
             .then(friends => {
-                //if (friends) { return friends.filter(f => f.username === friend) }
                 if (friends) {
                     return userData.retrievePnTokenById(friendId) 
                         .then(pnToken => {
-                            const { push_notification_token } = pnToken
+                            console.log(pnToken)
+                            const { push_notification_token, username: friendName } = pnToken
 
                             if (!push_notification_token)
-                                throw new Error(`User ${username} has no PN token.`)
+                                throw new Error(`User '${friendName}' has no PN token.`)
                             
                             const message = {
                                 type: 'confirmation',
@@ -194,12 +199,12 @@ class User {
     getPlaylists (userId, options) {
         debug('getPlaylists', userId)
         return userData.getPlaylists(userId, options)
-            .then(docs => {
+            .then(playlists => {
                 return userData.getAllMyPlaylists(userId, {})
                     .then(total => {
-                        docs.results_count = docs.playlists.length
-                        docs.results_fullcount = total.length
-                        return docs
+                        playlists.results_count = playlists.length
+                        playlists.results_fullcount = total.length
+                        return playlists
                     })
             })
     }

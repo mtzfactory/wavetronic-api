@@ -58,9 +58,9 @@ class UserData {
                 // if (options.show)
                 //     options.select += ' ' + options.show.split(',').join(' ')
 
-                // if (options.slice) {
-                //     projection = Object.assign(projection, options.slice)
-                // }
+                if (options.slice) {
+                    projection = Object.assign(projection, options.slice)
+                }
 
                 return single
                     ? User.findOne(conditions, projection)
@@ -100,16 +100,13 @@ class UserData {
             .exec() // Para que devuelva un Promise.
     }
 
-// /find
+// /user/friends
     searchByUsername(username) {
         return User.find({ username: { '$regex': username, '$options': 'i' } }, { _id: 1, username: 1 })
             .exec() // Para que devuelva un Promise.
     }
 
     searchMyFriendsByUsername(userId, username,friendName) {
-        // const projection = { _id: 0, 'friends._id': 1, 'friends.username': 1, 'friends.confirmed': 1 }
-        // return User.find({ _id: userId, friends: { $elemMatch: { username: { '$regex': username, '$options': 'i' } } } }, projection)
-        //     .exec() // Para que devuelva un Promise.
         return User.aggregate(
                 { $match: { 'username': username } },
                 { $unwind: '$friends' },
@@ -121,19 +118,6 @@ class UserData {
                 docs.map(d => result.push(d.friends) )
                 return result
             })
-
-
-// db.getCollection('users').find({username: 'ricardo', 'friends.username': { '$regex': 'jo', '$options': 'i' }}, { friends: {$elemMatch: {'username': { '$regex': 'jo', '$options': 'i' }} }})
-
-    }
-
-// /user/friends
-    getAllMyFriends (userId, options) {
-        options.show = 'friends._id,friends.username,friends.confirmed'
-        return this._query(() => {
-                if (!userId) throw new Error(`userId cannot be ${userId}`)
-            }, { _id: userId }, options, true)
-            .then(({friends}) => friends)
     }
 
     getFriends (userId, options) {
@@ -142,12 +126,21 @@ class UserData {
         return this._query(() => {
                 if (!userId) throw new Error(`userId cannot be ${userId}`)
             }, { _id: userId }, options, true)
+            .then(({friends}) => friends)
+    }
+
+    getAllMyFriends (userId, options) {
+        options.show = 'friends._id,friends.username,friends.confirmed'
+        return this._query(() => {
+                if (!userId) throw new Error(`userId cannot be ${userId}`)
+            }, { _id: userId }, options, true)
+            .then(({friends}) => friends)
     }
 
     retrievePnTokenById (userId) {
         return this._query(() => {
                 if (!userId) throw new Error(`userId cannot be ${userId}`)
-            }, { _id: userId }, { show: 'push_notification_token' }, true)
+            }, { _id: userId }, { show: 'username,push_notification_token' }, true)
     }
 
     retrieveFriendById (userId, friendId) {
@@ -156,7 +149,6 @@ class UserData {
     }
 
     addFriend (userId, friendId, friend) {
-        console.log('data -> addFriend userId', userId, friendId, friend)
         return  User.findOneAndUpdate(
             { _id: userId },
             { $push: { friends: { _id: friendId, username: friend } } },
@@ -199,6 +191,7 @@ class UserData {
         return this._query(() => {
                 if (!userId) throw new Error(`userId cannot be ${userId}`)
             }, { _id: userId }, options, true)
+            .then(({playlists}) => playlists)
     }
 
     retrievePlaylistIdByName (userId, name) {

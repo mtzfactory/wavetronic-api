@@ -53,13 +53,13 @@ user.route('/')
 user.route('/friends')
     .get(function(req, res) {
         const reqStart = new Date().getTime()
-        const { name } = req.query
+        const { name: search, only_confirmed, only_friends } = req.query
         const { id: userId, username } = req.user // Passport
         const { offset, limit, show, hide } = req // middleware del router api (index.js)
         const options = { offset, limit, show, hide }
 
-        if (name) {
-            User.searchByUsername(userId, username, name, options)            
+        if (search) {
+            User.searchByUsername(userId, username, { search, only_confirmed, only_friends }, options)            
                 .then( results => {
                     res.status(200).json({
                         status: 'success',
@@ -76,7 +76,7 @@ user.route('/friends')
                 .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
         }
         else {
-            User.getFriends(userId, options)
+            User.getFriends(userId, { only_confirmed }, options)
                 .then( results => {
                     res.status(200).json({
                         status: 'success',
@@ -87,7 +87,7 @@ user.route('/friends')
                             results_fullcount: results.results_fullcount,
                             response_time: new Date().getTime() - reqStart
                         },
-                        results: results.friends
+                        results: results.results
                     })
                 })
                 .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
@@ -117,7 +117,7 @@ user.route('/friends/:friendId')
         const { offset, limit, show, hide } = req // middleware del router api (index.js)
         const { friendId } = req.params
 
-        User.updateFriendship(username, userId, friendId)
+        User.updateFriendship(userId, username, friendId)
             .then( results => {
                 res.status(200).json({
                     status: 'success',
@@ -181,7 +181,7 @@ user.route('/playlists')
                         results_fullcount: results.results_fullcount,
                         response_time: new Date().getTime() - reqStart
                     },
-                    results: results.playlists
+                    results: results
                 })
             })
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
