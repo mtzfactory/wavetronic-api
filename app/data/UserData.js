@@ -250,7 +250,7 @@ class UserData {
               $inc: { 'playlists.$.amount': 1 },
               $currentDate: { 'playlists.$.last_modified': true }
             },
-            { safe: true, new: true, fields: { 'playlists': {$elemMatch: { _id: playlistId } } } })
+            { safe: true, new: true, fields: { 'playlists': { $elemMatch: { _id: playlistId } } } })
             .exec() // Para que devuelva un Promise.
             .then(({playlists}) => playlists[0].tracks)
     }
@@ -262,7 +262,7 @@ class UserData {
               $inc: { 'playlists.$.amount' : -1 },
               $currentDate: { 'playlists.$.last_modified': true }
             },
-            { safe:true, new: true, fields: { 'playlists': {$elemMatch: { _id: playlistId } } } })
+            { safe: true, new: true, fields: { 'playlists': { $elemMatch: { _id: playlistId } } } })
             .exec() // Para que devuelva un Promise.
             .then(({playlists}) => playlists[0].tracks)
     }

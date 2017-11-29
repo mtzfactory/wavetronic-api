@@ -231,7 +231,7 @@ class User {
         debug('getTracksFromPlaylist', userId, playlistId)
         return userData.getTracksFromPlaylist(userId, playlistId, options)
             .then(tracks => {
-                if (tracks) {
+                if (tracks.length > 0) {
                     const { offset, limit } = options
                     const filtered = {}
                     filtered.id = tracks.slice(offset, offset + limit).join('+')
@@ -241,8 +241,16 @@ class User {
                             return results
                         })
                 }
+                
+                const results = {}
+                results.headers = {
+                    results_count: 0,
+                    results_fullcount: 0,
+                }
+                results.results = []
+                return results
 
-                throw new Error(`no traks in ${playlistId}`)
+                //throw new Error(`no traks in ${playlistId}`)
             })
     }
 
