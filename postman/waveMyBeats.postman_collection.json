@@ -291,7 +291,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMDczMWUzZDkwOTZmMzI0NWU5M2M5OSIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDQyNDkwNn0.FRujPlleJJ-dTT9s6pe8G9OX1DFvFwlDuYXx9GB_56w"
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
 							}
 						],
 						"body": {},
@@ -411,7 +411,7 @@
 						],
 						"body": {},
 						"url": {
-							"raw": "http://localhost:3001/api/v1/user/friends?offset=0&limit=15",
+							"raw": "http://localhost:3001/api/v1/user/friends?offset=0&limit=30",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -431,7 +431,7 @@
 								},
 								{
 									"key": "limit",
-									"value": "15",
+									"value": "30",
 									"equals": true
 								}
 							]
@@ -475,6 +475,52 @@
 						"description": ""
 					},
 					"response": []
+				},
+				{
+					"name": "/api/v1/user/friends (Find by name)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/user/friends?offset=0&limit=15&name=jo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"friends"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "0",
+									"equals": true
+								},
+								{
+									"key": "limit",
+									"value": "15",
+									"equals": true
+								},
+								{
+									"key": "name",
+									"value": "jo",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
 				}
 			]
 		},
@@ -489,12 +535,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMTk1MTA2N30.nZYeUQYJI4phwThMRFPeaR2u89r7DxyOlG6R3GSGbFg"
 							}
 						],
 						"body": {},
 						"url": {
-							"raw": "http://localhost:3001/api/v1/user/friends/julie",
+							"raw": "http://localhost:3001/api/v1/user/friends/5a1bdb64b9cd800c18abec1f",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -505,7 +551,7 @@
 								"v1",
 								"user",
 								"friends",
-								"julie"
+								"5a1bdb64b9cd800c18abec1f"
 							]
 						},
 						"description": ""
@@ -555,12 +601,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTZlMTY2NzhkMWZhYzA4NDM1MiIsInVzZXJuYW1lIjoicmljYXJkbyIsImlhdCI6MTUxMDY3MDAwNn0.82xM323GOjgG7gbFPqSpXb8wgqAt8ygnQz-f1y69LlA"
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhMGFmZTdmMTY2NzhkMWZhYzA4NDM1MyIsInVzZXJuYW1lIjoiZXJpYyIsImlhdCI6MTUxMTM4NTk4OH0.2DZafv44zHs_vGUwfbWFq3mLTSc6TChEiEUDxnD64N0"
 							}
 						],
 						"body": {},
 						"url": {
-							"raw": "http://localhost:3001/api/v1/user/friends/5a0afe8716678d1fac084354/track/123456",
+							"raw": "http://localhost:3001/api/v1/user/friends/5a0afe6e16678d1fac084352/track/1204669",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -571,9 +617,9 @@
 								"v1",
 								"user",
 								"friends",
-								"5a0afe8716678d1fac084354",
+								"5a0afe6e16678d1fac084352",
 								"track",
-								"123456"
+								"1204669"
 							]
 						},
 						"description": ""
@@ -681,7 +727,7 @@
 						],
 						"body": {},
 						"url": {
-							"raw": "http://localhost:3001/api/v1/user/playlists/5a0db5d22917d350c7634c17",
+							"raw": "http://localhost:3001/api/v1/user/playlists/5a0db5d22917d350c7634c17?offset=0&limit=15",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -693,6 +739,18 @@
 								"user",
 								"playlists",
 								"5a0db5d22917d350c7634c17"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "0",
+									"equals": true
+								},
+								{
+									"key": "limit",
+									"value": "15",
+									"equals": true
+								}
 							]
 						},
 						"description": ""
@@ -755,20 +813,21 @@
 						],
 						"body": {},
 						"url": {
-							"raw": "http://localhost:3001/api/v1/user/playlists/5a1434cb7a7158546aef6542/track/1258976",
-							"protocol": "http",
+							"raw": "https://wavemybeat-api.herokuapp.com/api/v1/user/playlists/5a141986a19dac49e805d449/track/1157362",
+							"protocol": "https",
 							"host": [
-								"localhost"
+								"wavemybeat-api",
+								"herokuapp",
+								"com"
 							],
-							"port": "3001",
 							"path": [
 								"api",
 								"v1",
 								"user",
 								"playlists",
-								"5a1434cb7a7158546aef6542",
+								"5a141986a19dac49e805d449",
 								"track",
-								"1258976"
+								"1157362"
 							]
 						},
 						"description": ""
