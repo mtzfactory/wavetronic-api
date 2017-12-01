@@ -62,7 +62,7 @@ auth.post('/login', passport.authenticate('local', { session: false }), (req, re
 })
 
 auth.get('/revoke', function(req, res){
-    const { _id: id, username } = req.user
+    const { id: userId, username } = req.user
 
     //req.logout()
 
