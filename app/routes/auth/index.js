@@ -65,11 +65,10 @@ auth.get('/revoke', function(req, res){
     const { _id: id, username } = req.user
 
     req.logout()
-    
+
     res.status(200).json({
         status: 'success',
         message: `user '${username}' logged out successfully`,
-        data: token
     })
     //res.redirect('/')
 })
