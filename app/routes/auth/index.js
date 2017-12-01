@@ -64,7 +64,7 @@ auth.post('/login', passport.authenticate('local', { session: false }), (req, re
 auth.get('/revoke', function(req, res){
     const { id: userId, username } = req.user
 
-    //req.logout()
+    req.logout()
 
     res.status(200).json({
         status: 'success',
