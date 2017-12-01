@@ -61,14 +61,14 @@ auth.post('/login', passport.authenticate('local', { session: false }), (req, re
     })
 })
 
-auth.get('/revoke', function(req, res){
-    const { id: userId, username } = req.user
-
-    req.logout()
+auth.get('/revoke/:username', function(req, res){
+    const { username } = req.params
+    
+    //req.logout()
 
     res.status(200).json({
         status: 'success',
-        message: `user '${username}' logged out successfully`,
+        message: `user ${username} logged out successfully`,
     })
     //res.redirect('/')
 })
