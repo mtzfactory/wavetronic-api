@@ -37,8 +37,10 @@ user.route('/')
         const { id: userId, username } = req.user // Passport
         const { pnToken } = req.body
 
-        if (pnToken) {
-            User.updatePushNotificationToken(userId, pnToken)
+        if (!pnToken)
+            throw new Error ('No PN token submitted.')
+
+        User.updatePushNotificationToken(userId, pnToken)
             .then( results => {
                 res.status(200).json({
                     status: 'success',
@@ -47,7 +49,6 @@ user.route('/')
                 })
             })
             .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
-        }
     })
 
 user.route('/friends')
