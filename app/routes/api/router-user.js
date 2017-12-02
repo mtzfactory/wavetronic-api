@@ -38,17 +38,18 @@ user.route('/')
         const { pnToken } = req.body
 
         if (!pnToken)
-            throw new Error ('No PN token submitted.')
-
-        User.updatePushNotificationToken(userId, pnToken)
-            .then( results => {
-                res.status(200).json({
-                    status: 'success',
-                    headers: { response_time: new Date().getTime() - reqStart },
-                    results
+            res.status(404).json({ status: 'error' , message: 'No PN token submitted.' })
+        else {
+            User.updatePushNotificationToken(userId, pnToken)
+                .then( results => {
+                    res.status(200).json({
+                        status: 'success',
+                        headers: { response_time: new Date().getTime() - reqStart },
+                        results
+                    })
                 })
-            })
-            .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
+                .catch( error => res.status(404).json({ status: 'error' , message: error.message }) )
+        }
     })
 
 user.route('/friends')
