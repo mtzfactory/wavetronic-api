@@ -12,7 +12,7 @@ if (DEBUG) {
     api.use(function(req, res, next) {
         // do logging
         const { method, path, body} = req
-        debug({ method, path, body })
+        //debug({ method, path, body })
         next() // make sure we go to the next routes and don't stop here
     })
 }
