@@ -54,15 +54,15 @@ user.route('/')
 
 user.route('/logout')
     .get(function(req, res){
-    const { id: userId, username } = req.user // Passport
-    
-    req.logout()
+        const { id: userId, username } = req.user // Passport
+        
+        req.logout()
 
-    res.status(200).json({
-        status: 'success',
-        message: `user ${username} logged out successfully`,
-    })
-    //res.redirect('/')
+        res.status(200).json({
+            status: 'success',
+            message: `user ${username} logged out successfully`,
+        })
+        //res.redirect('/')
 })
 
 user.route('/friends')
