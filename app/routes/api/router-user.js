@@ -52,6 +52,18 @@ user.route('/')
         }
     })
 
+user.get('/logout', function(req, res){
+    const { id: userId, username } = req.user // Passport
+    
+    req.logout()
+
+    res.status(200).json({
+        status: 'success',
+        message: `user ${username} logged out successfully`,
+    })
+    //res.redirect('/')
+})
+
 user.route('/friends')
     .get(function(req, res) {
         const reqStart = new Date().getTime()

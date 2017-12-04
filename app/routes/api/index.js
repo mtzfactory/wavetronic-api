@@ -1,6 +1,5 @@
 const express = require('express')
 const passport = require('passport')
-const debug = require('debug')('api')
 
 const { DEBUG } = require('../../constants')
 
@@ -24,7 +23,7 @@ api.get('/', (req, res) => {
     res.status(200)
         .json({
             'status': 'success',
-            'message': `${username}, welcome to Music Share API !`
+            'message': `${username}, welcome to WAVETRONIC Api !`
         })
 })
 
