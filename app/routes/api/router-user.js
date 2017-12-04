@@ -52,7 +52,8 @@ user.route('/')
         }
     })
 
-user.get('/logout', function(req, res){
+user.route('/logout')
+    .get(function(req, res){
     const { id: userId, username } = req.user // Passport
     
     req.logout()
